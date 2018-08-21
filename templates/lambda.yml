@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: "2010-09-09"
+ 
+Description : "Timely update dynamodb"
+ 
+Resources:
+  UpdateDbFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        Code
+      Environment:
+        Environment
+      FunctionName: TimelyUpdateDb
+      Handler: String
+      MemorySize: ""
+      ReservedConcurrentExecutions: 2
+      Role: timely-FunctionRole
+      Runtime: python3.6
+      Timeout: 60
+      Tags: 
+        Key: version
+        Value: 1.0

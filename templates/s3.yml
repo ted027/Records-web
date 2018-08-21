@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: "2010-09-09"
+ 
+Description : "web and lambda code"
+
+Resources:
+  resourcebucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: String
+      AccelerateConfiguration:
+        AccelerateConfiguration
+      AnalyticsConfigurations:
+        - AnalyticsConfiguration
+      BucketEncryption: 
+        BucketEncryption
+      BucketName: String
+      CorsConfiguration:
+        CorsConfiguration
+      InventoryConfigurations:
+        - InventoryConfiguration 
+      LifecycleConfiguration:
+        LifecycleConfiguration
+      LoggingConfiguration:
+        LoggingConfiguration
+      MetricsConfigurations: 
+        - MetricsConfiguration
+      NotificationConfiguration:
+        NotificationConfiguration
+      ReplicationConfiguration:
+        ReplicationConfiguration
+      Tags:
+        - Resource Tag
+      VersioningConfiguration:
+        VersioningConfiguration
+      WebsiteConfiguration:
+        WebsiteConfiguration
