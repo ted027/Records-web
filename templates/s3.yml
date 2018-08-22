@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description : "web and lambda code"
 
 Resources:
-  resourcebucket:
+  record:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: String

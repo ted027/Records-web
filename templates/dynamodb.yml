@@ -1,52 +1,28 @@
 AWSTemplateFormatVersion: "2010-09-09"
  
-Description : "dynamodb table"
- 
-Parameters:
-  HashKeyElementName:
-    Description : HashType PrimaryKey Name
-    Type : String
-    AllowedPattern : [a-zA-Z0-9]*
-    MinLength: 1
-    MaxLength: 2048
-    ConstraintDescription : must contain only alphanumberic characters
+Description : Record table
 
-  HashKeyElementType:
-    Description : HashType PrimaryKey Type
-    Type : String
-    Default : S
-    AllowedPattern : [S|N]
-    MinLength: 1
-    MaxLength: 1
-    ConstraintDescription : must be either S or N
-
-  ReadCapacityUnits:
-    Description : Provisioned read throughput
-    Type : Number
-    Default : 5
-    MinValue: 5
-    MaxValue: 10000
-    ConstraintDescription : must be between 5 and 10000
-
-  WriteCapacityUnits:
-    Description : Provisioned write throughput
-    Type : Number
-    Default : 10
-    MinValue: 5
-    MaxValue: 10000
-    ConstraintDescription : must be between 5 and 10000
+Mapping:
+  CapacityMapping:
+    Setting:
+      Read: 1
+      Write: 1
 
 Resources: 
-  myDynamoDBTable:
+  RecordTable:
     Type : AWS::DynamoDB::Table
     Properties:
+      TableName: RecordTable
       AttributeDefinitions: 
-      - AttributeName: !Ref HashKeyElementName
-      - AttributeType: !Ref HashKeyElementType
-      
+        - AttributeName: HashKey
+          AttributeType: S
       KeySchema:
-      - AttributeName: !Ref "HashKeyElementName"
-      - KeyType: "HASH"
-      ProvisionedThroughput : 
-      - ReadCapacityUnits : !Ref: ReadCapacityUnits
-      - WriteCapacityUnits: !Ref: WriteCapacityUnits
+        - AttributeName: HashKey
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: !FindInMap [CapacityMapping, Setting, Read]
+        WriteCapacityUnits: !FindInMap [CapacityMapping, Setting, Write]
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - { Key: varsion, Value: 1.0 }

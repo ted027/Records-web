@@ -2,15 +2,28 @@
 
 
 Resources:
-  FunctionRole:
+  DbUpdateRole:
     Type: AWS::IAM::Role
     Properties: 
       AssumeRolePolicyDocument:
-        JSON object
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
       ManagedPolicyArns:
-        - 文字列
-      MaxSessionDuration: Integer
-       Path: String
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
-        - Policies
+        - PolicyName: !Sub '${Section}-${ServiceId}-${RunPhase}-dym'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:*
+              Resource: '*'
+              - !Sub 'arn:aws:dynamodb:*:*:table/*'
       RoleName: timely-FunctionRole
