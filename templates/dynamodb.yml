@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
  
-Description : Record table
+Description: Record table
 
 Mapping:
   CapacityMapping:
@@ -25,4 +25,4 @@ Resources:
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
       Tags:
-        - { Key: varsion, Value: 1.0 }
+        - { Key: version, Value: 1.0 }

@@ -1,20 +1,46 @@
 AWSTemplateFormatVersion: "2010-09-09"
  
-Description : "Daily update database"
+Description: Daily update database
  
 Resources:
+  DbUpdateRole:
+    Type: AWS::IAM::Role
+    Properties: 
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: !Sub '${Section}-${ServiceId}-${RunPhase}-dym'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+            - Effect: Allow
+              Action:
+              - dynamodb:*
+              Resource: '*'
+              - !Sub 'arn:aws:dynamodb:*:*:table/*'
+      RoleName: timely-FunctionRole
+
   UpdateDbFunction:
     Type: AWS::Lambda::Function
     Properties:
       Code:
-        S3Bucket: record
-        S3Key: module/daily_updatedb.zip
+        S3Bucket: module
+        S3Key: daily/update_db.zip
       FunctionName: DailyUpdateDb
       Handler: lambda_function.lambda_handler
       MemorySize: 256
       ReservedConcurrentExecutions: 2
-      Role: timely-FunctionRole #arn
+      Role: !GetAtt DbUpdateRole.Arn
       Runtime: python3.6
       Timeout: 60
       Tags: 
-        - { Key: varsion, Value: 1.0 }
+        - { Key: version, Value: 1.0 }

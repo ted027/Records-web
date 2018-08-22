@@ -1,36 +1,37 @@
 AWSTemplateFormatVersion: "2010-09-09"
  
-Description : "web and lambda code"
+Description : web and module bucket
 
 Resources:
-  record:
+  module:
     Type: AWS::S3::Bucket
     Properties: 
-      AccessControl: String
-      AccelerateConfiguration:
-        AccelerateConfiguration
-      AnalyticsConfigurations:
-        - AnalyticsConfiguration
-      BucketEncryption: 
-        BucketEncryption
-      BucketName: String
-      CorsConfiguration:
-        CorsConfiguration
-      InventoryConfigurations:
-        - InventoryConfiguration 
-      LifecycleConfiguration:
-        LifecycleConfiguration
+      AccessControl: Private
+      BucketName: record-module
       LoggingConfiguration:
-        LoggingConfiguration
-      MetricsConfigurations: 
-        - MetricsConfiguration
-      NotificationConfiguration:
-        NotificationConfiguration
-      ReplicationConfiguration:
-        ReplicationConfiguration
+        DestinationBucketName: log
+        LogFilePrefix: record/module/
       Tags:
-        - Resource Tag
-      VersioningConfiguration:
-        VersioningConfiguration
+        - { Key: version, Value: 1.0 }
+
+  web:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: PublicRead
+      BucketName: record-web
+      LoggingConfiguration:
+        DestinationBucketName: log
+        LogFilePrefix: record/web/
+      Tags:
+        - { Key: version, Value: 1.0 }
       WebsiteConfiguration:
-        WebsiteConfiguration
+        ErrorDocument: error.html
+        IndexDocument: index.html
+
+  log:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: Private
+      BucketName: common-log
+      Tags:
+        - { Key: version, Value: 0.0 }
