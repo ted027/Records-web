@@ -5,23 +5,25 @@ Description : web and module bucket
 Resources:
   module:
     Type: AWS::S3::Bucket
+    DependoOn: log
     Properties: 
       AccessControl: Private
-      BucketName: record-module
+      BucketName: records-module
       LoggingConfiguration:
-        DestinationBucketName: log
-        LogFilePrefix: record/module/
+        DestinationBucketName: !Ref log
+        LogFilePrefix: records/module/
       Tags:
         - { Key: version, Value: 1.0 }
 
   web:
     Type: AWS::S3::Bucket
+    DependoOn: log
     Properties: 
       AccessControl: PublicRead
-      BucketName: record-web
+      BucketName: records-web
       LoggingConfiguration:
-        DestinationBucketName: log
-        LogFilePrefix: record/web/
+        DestinationBucketName: !Ref log
+        LogFilePrefix: records/web/
       Tags:
         - { Key: version, Value: 1.0 }
       WebsiteConfiguration:
@@ -31,7 +33,26 @@ Resources:
   log:
     Type: AWS::S3::Bucket
     Properties: 
-      AccessControl: Private
+      AccessControl: LogDeliveryWrite
       BucketName: common-log
       Tags:
         - { Key: version, Value: 0.0 }
+
+  WebPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: 
+        Ref: web
+      PolicyDocument:
+        Statement:
+        -
+          Sid: PublicReadForGetBucketObjects
+          Action: s3:GetObject
+          Effect: Allow
+          Principal: '*'
+          Resource: rn:aws:s3:::web/*
+          # Condition:
+          #   StringLike:
+          #     aws:Referer:
+          #       - http://www.example.com/*
+          #       - http://example.com/*
