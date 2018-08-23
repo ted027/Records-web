@@ -1,36 +1,58 @@
 AWSTemplateFormatVersion: "2010-09-09"
  
-Description : "web and lambda code"
+Description : web and module bucket
 
 Resources:
-  resourcebucket:
+  module:
+    Type: AWS::S3::Bucket
+    DependoOn: log
+    Properties: 
+      AccessControl: Private
+      BucketName: records-module
+      LoggingConfiguration:
+        DestinationBucketName: !Ref log
+        LogFilePrefix: records/module/
+      Tags:
+        - { Key: version, Value: 1.0 }
+
+  web:
+    Type: AWS::S3::Bucket
+    DependoOn: log
+    Properties: 
+      AccessControl: PublicRead
+      BucketName: records-web
+      LoggingConfiguration:
+        DestinationBucketName: !Ref log
+        LogFilePrefix: records/web/
+      Tags:
+        - { Key: version, Value: 1.0 }
+      WebsiteConfiguration:
+        ErrorDocument: error.html
+        IndexDocument: index.html
+
+  log:
     Type: AWS::S3::Bucket
     Properties: 
-      AccessControl: String
-      AccelerateConfiguration:
-        AccelerateConfiguration
-      AnalyticsConfigurations:
-        - AnalyticsConfiguration
-      BucketEncryption: 
-        BucketEncryption
-      BucketName: String
-      CorsConfiguration:
-        CorsConfiguration
-      InventoryConfigurations:
-        - InventoryConfiguration 
-      LifecycleConfiguration:
-        LifecycleConfiguration
-      LoggingConfiguration:
-        LoggingConfiguration
-      MetricsConfigurations: 
-        - MetricsConfiguration
-      NotificationConfiguration:
-        NotificationConfiguration
-      ReplicationConfiguration:
-        ReplicationConfiguration
+      AccessControl: LogDeliveryWrite
+      BucketName: common-log
       Tags:
-        - Resource Tag
-      VersioningConfiguration:
-        VersioningConfiguration
-      WebsiteConfiguration:
-        WebsiteConfiguration
+        - { Key: version, Value: 0.0 }
+
+  WebPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: 
+        Ref: web
+      PolicyDocument:
+        Statement:
+        -
+          Sid: PublicReadForGetBucketObjects
+          Action: s3:GetObject
+          Effect: Allow
+          Principal: '*'
+          Resource: rn:aws:s3:::web/*
+          # Condition:
+          #   StringLike:
+          #     aws:Referer:
+          #       - http://www.example.com/*
+          #       - http://example.com/*
