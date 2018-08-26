@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import VisibleTodoList from './containers/VisibleTodoList';
+import AddTodo from './containers/AddTodo';
+import Filter from './components/Filter';
 
 class App extends Component {
   render() {
@@ -15,7 +17,9 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
+          <AddTodo />
           <VisibleTodoList />
+          <Filter />
         </div>
       </div>
     );
