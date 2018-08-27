@@ -1,21 +1,22 @@
 import React from 'react';
-import Link from './Link';
+// import Link from './Link';
+import FilterLink from '../containers/FilterLink';
 
 const Filter=()=>(
     <p>
         Show:
         {""}
-        <Link>
+        <FilterLink filter="SHOW_ALL">
             All
-        </Link>
+        </FilterLink>
         {","}
-        <Link>
+        <FilterLink filter="SHOW_ACTIVE">
             Active
-        </Link>
+        </FilterLink>
         {","}
-        <Link>
+        <FilterLink filter="SHOW_COMPLETED">
             Completed
-        </Link>
+        </FilterLink>
     </p>
 )
 export default Filter

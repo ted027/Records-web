@@ -5,14 +5,16 @@ const Link = ({ active, children, onClick }) => {
     if (active) {
         return <span>{children}</span>
     }
-    <a href="#"
-        onClick={(e) => {
-            e.preventDefault()
-            onClick()
-        }}
-    >
-        {children}
-    </a>
+    return (
+        <a href="#"
+            onClick={(e) => {
+                e.preventDefault()
+                onClick()
+            }}
+        >
+            {children}
+        </a>
+    )
 }
 
 Link.propTypes = {
