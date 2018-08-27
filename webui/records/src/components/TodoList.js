@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Todo from './Todo';
+import {List} from 'material-ui/List';
 
-const TodoList = ({ todos, onTodoClick }) => {
-    <ul>
+const TodoList = ({ todos, onTodoClick }) => (
+    <List>
         {todos && todos.map((todo, index) => (
             <Todo
                 key={todo.id}
@@ -11,8 +12,8 @@ const TodoList = ({ todos, onTodoClick }) => {
                 onClick={() => onTodoClick(todo.id)}
             />
         ))}
-    </ul>
-}
+    </List>
+)
 
 TodoList.propTypes = {
     todos: PropTypes.arrayOf(

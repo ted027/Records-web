@@ -7,12 +7,7 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-import { addTodo } from './actions';
-
 let store = createStore(todo)
-
-store.dispatch(addTodo('Helloooooo'))
-console.log(store.getState())
 
 ReactDOM.render(
     <Provider store={store}>
