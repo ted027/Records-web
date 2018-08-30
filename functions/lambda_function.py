@@ -16,6 +16,8 @@ def lambda_handler(event, context):
     ppurl = baseurl + 'pptop'
 
     # for c cp p pp
-    res = requests.get(curl)
+    url = curl
+    
+    res = requests.get(url)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.content, "html.parser")

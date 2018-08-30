@@ -6,6 +6,12 @@ import AddTodo from './containers/AddTodo';
 import Filter from './components/Filter';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
+import Table from '@material-ui/core/Table';
+import Paper from '@material-ui/core/Paper';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
 
 class App extends Component {
   render() {
@@ -20,6 +26,16 @@ class App extends Component {
           <AddTodo />
           <VisibleTodoList />
           <Filter />
+          <Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>TODO</TableCell>
+                </TableRow>
+              </TableHead>
+            </Table>
+          </Paper>
+
         </div>
       </div>
       </MuiThemeProvider>
