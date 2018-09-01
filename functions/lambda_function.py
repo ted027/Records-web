@@ -21,3 +21,8 @@ def lambda_handler(event, context):
     res = requests.get(url)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.content, "html.parser")
+
+    trs = soup.find_all("tr")
+
+    for tr in trs:
+        ths = tr.find_all("th")

@@ -13,6 +13,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 
+const styles = theme => ({
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
+  table: {
+    minWidth: 700,
+  },
+});
+
 class App extends Component {
   render() {
     return (
@@ -24,7 +35,6 @@ class App extends Component {
         />
         <div>
           <AddTodo />
-          <VisibleTodoList />
           <Filter />
           <Paper>
             <Table>
@@ -33,9 +43,11 @@ class App extends Component {
                   <TableCell>TODO</TableCell>
                 </TableRow>
               </TableHead>
+              <TableBody>
+                <VisibleTodoList />
+              </TableBody>
             </Table>
           </Paper>
-
         </div>
       </div>
       </MuiThemeProvider>
