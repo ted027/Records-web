@@ -139,7 +139,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 1020
+    minWidth: 100
   },
   tableWrapper: {
     overflowX: "auto"
@@ -175,7 +175,7 @@ class EnhancedTable extends React.Component {
     const { data, order, orderBy, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
+    var i = 1;
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar />
@@ -188,22 +188,20 @@ class EnhancedTable extends React.Component {
               rowCount={data.length}
             />
             <TableBody>
-              {data
-                .sort(getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  return (
-                    <TableRow hover tabIndex={-1} key={n.id}>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.name}
-                      </TableCell>
-                      <TableCell numeric>{n.calories}</TableCell>
-                      <TableCell numeric>{n.fat}</TableCell>
-                      <TableCell numeric>{n.carbs}</TableCell>
-                      <TableCell numeric>{n.protein}</TableCell>
-                    </TableRow>
-                  );
-                })}
+              {data.sort(getSorting(order, orderBy)).map(n => {
+                return (
+                  <TableRow hover tabIndex={-1} key={n.id}>
+                    <TableCell numeric>{i++}</TableCell>
+                    <TableCell component="th" scope="row" padding="none">
+                      {n.name}
+                    </TableCell>
+                    <TableCell numeric>{n.contents[0]}</TableCell>
+                    <TableCell numeric>{n.contents[1]}</TableCell>
+                    <TableCell numeric>{n.contents[2]}</TableCell>
+                    <TableCell numeric>{n.contents[3]}</TableCell>
+                  </TableRow>
+                );
+              })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: 49 * emptyRows }}>
                   <TableCell colSpan={6} />
