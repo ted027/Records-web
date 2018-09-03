@@ -15,7 +15,13 @@ export const rows = [
     id: "name",
     numeric: false,
     disablePadding: true,
-    label: "Name"
+    label: "氏名"
+  },
+  {
+    id: "team",
+    numeric: false,
+    disablePadding: true,
+    label: "球団"
   }
 ];
 for (var i = 0; i < lists.length; i++) {

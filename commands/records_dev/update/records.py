@@ -44,12 +44,11 @@ def records(ctx):
             i for i in raw_contents.text.replace("\r", "").replace(" ", "")
             .split("\n") if i != ""
         ]
-        if contents == raw_header:
-            break
+        if contents[0] == header[0]:
+            continue
 
         del contents[16:20]
-        print(contents[0])
-        contents[0] = contents[0].split(":")[1]
+        contents[0] = contents[0].split(':')[1]
         records_index.append(contents)
 
     sres = requests.get(surl)
@@ -58,11 +57,10 @@ def records(ctx):
 
     strs = ssoup.find_all("tr")
 
-    raw_sheader = [
-        i for i in trs[0].text.replace("\r", "").replace(" ", "").split("\n")
+    sheader = [
+        i for i in strs[0].text.replace("\r", "").replace(" ", "").split("\n")
         if i != ""
     ]
-    sheader = raw_sheader
     del sheader[:5]
     records_index[0].extend(sheader)
     sbody = strs[1:]
@@ -72,14 +70,16 @@ def records(ctx):
              i for i in raw_scontents.text.replace("\r", "").replace(" ", "")
             .split("\n") if i != ""
         ]
-        if scontents == raw_sheader:
-            break
+        sname = scontents[0]
+        del scontents[:5]
+        if scontents[0] == sheader[0]:
+            continue
 
-        scontents[0] = scontents[0].split(":")[1]
+        sname = sname.split(':')[1]
         for record in records_index:
-            if scontents[0] != record[0]:
-                break
+            if sname != record[0]:
+                continue
 
-            record.exrend(scontents[5:])
+            record.extend(scontents)
 
     print(records_index)

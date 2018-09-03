@@ -80,58 +80,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
-  spacer: {
-    flex: "1 1 100%"
-  },
-  actions: {
-    color: theme.palette.text.secondary
-  },
-  title: {
-    flex: "0 0 auto"
-  }
-});
-
-let EnhancedTableToolbar = props => {
-  const { classes } = props;
-
-  return (
-    <Toolbar className={classNames(classes.root)}>
-      <div className={classes.title}>
-        <Typography variant="title" id="tableTitle">
-          Nutrition
-        </Typography>
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        <Tooltip title="Filter list">
-          <IconButton aria-label="Filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      </div>
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 
 const styles = theme => ({
   root: {
@@ -178,7 +126,6 @@ class EnhancedTable extends React.Component {
     var i = 1;
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -194,6 +141,9 @@ class EnhancedTable extends React.Component {
                     <TableCell numeric>{i++}</TableCell>
                     <TableCell component="th" scope="row" padding="none">
                       {n.name}
+                    </TableCell>
+                    <TableCell component="th" scope="row" padding="none">
+                      {n.team}
                     </TableCell>
                     <TableCell numeric>{n.contents[0]}</TableCell>
                     <TableCell numeric>{n.contents[1]}</TableCell>
