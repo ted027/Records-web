@@ -8,6 +8,7 @@ import requests
 import bs4
 import json
 
+
 def lambda_handler(event, context):
     baseurl = 'http://baseballdata.jp/'
     curl = baseurl + 'ctop'
@@ -17,7 +18,7 @@ def lambda_handler(event, context):
 
     # for c cp p pp
     url = curl
-    
+
     res = requests.get(url)
     res.raise_for_status()
     soup = bs4.BeautifulSoup(res.content, "html.parser")
@@ -25,4 +26,5 @@ def lambda_handler(event, context):
     trs = soup.find_all("tr")
 
     for tr in trs:
-        ths = tr.find_all("th")
+        contents = [i for i in tr.text.replace(
+            "\r", "").replace(" ", "").split("\n") if i != ""]
