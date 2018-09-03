@@ -13,8 +13,14 @@ def records(ctx):
     purl = baseurl + 'ptop'
     ppurl = baseurl + 'pptop'
 
+    csurl = baseurl + 'sabr/cNOI'
+    cpsurl = baseurl + 'sabr/cHIDARITU'
+    psurl = baseurl + 'sabr/pNOI'
+    ppsurl = baseurl + 'sabr/pHIDARITU'
+
     # for c cp p pp
     url = curl
+    surl = csurl
 
     res = requests.get(url)
     res.raise_for_status()
@@ -31,14 +37,49 @@ def records(ctx):
     del header[2]
     body = trs[1:]
 
-    records_index = []
+    records_index = [header]
 
     for raw_contents in body:
         contents = [
             i for i in raw_contents.text.replace("\r", "").replace(" ", "")
             .split("\n") if i != ""
         ]
-        if contents != raw_header:
-            del contents[16:20]
-            contents[0] = contents[0].split(":")[1]
-            records_index.append(contents)
+        if contents == raw_header:
+            break
+
+        del contents[16:20]
+        print(contents[0])
+        contents[0] = contents[0].split(":")[1]
+        records_index.append(contents)
+
+    sres = requests.get(surl)
+    sres.raise_for_status()
+    ssoup = bs4.BeautifulSoup(sres.content, "html.parser")
+
+    strs = ssoup.find_all("tr")
+
+    raw_sheader = [
+        i for i in trs[0].text.replace("\r", "").replace(" ", "").split("\n")
+        if i != ""
+    ]
+    sheader = raw_sheader
+    del sheader[:5]
+    records_index[0].extend(sheader)
+    sbody = strs[1:]
+
+    for raw_scontents in sbody:
+        scontents = [
+             i for i in raw_scontents.text.replace("\r", "").replace(" ", "")
+            .split("\n") if i != ""
+        ]
+        if scontents == raw_sheader:
+            break
+
+        scontents[0] = scontents[0].split(":")[1]
+        for record in records_index:
+            if scontents[0] != record[0]:
+                break
+
+            record.exrend(scontents[5:])
+
+    print(records_index)
