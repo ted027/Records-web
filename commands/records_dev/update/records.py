@@ -82,4 +82,13 @@ def records(ctx):
 
             record.extend(scontents)
 
-    print(records_index)
+    # print(records_index)
+    records_dict = {
+        'records': records_index
+    }
+
+    json_path = './webui/src/records.json'
+
+    f = open(json_path, 'w')
+    json.dump(records_dict, f)
+    f.close

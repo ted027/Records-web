@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import VisibleTodoList from './containers/VisibleTodoList';
-import AddTodo from './containers/AddTodo';
-import Filter from './components/Filter';
+// import Filter from './components/Filter';
 import Table from './components/Table';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import AppBar from 'material-ui/AppBar';
 
 const styles = theme => ({
   root: {
@@ -15,7 +12,7 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   table: {
-    minWidth: 700,
+    minWidth: 1000,
   },
 });
 
