@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -8,13 +7,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { rows, recordData } from "./Records";
 
 function desc(a, b, orderBy) {
@@ -39,7 +33,7 @@ class EnhancedTableHead extends React.Component {
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order } = this.props;
 
     return (
       <TableHead>
@@ -57,7 +51,6 @@ class EnhancedTableHead extends React.Component {
                   enterDelay={300}
                 >
                   <TableSortLabel
-                    active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
                   >
@@ -80,59 +73,6 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-const toolbarStyles = theme => ({
-  root: {
-    paddingRight: theme.spacing.unit
-  },
-  highlight:
-    theme.palette.type === "light"
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
-  spacer: {
-    flex: "1 1 100%"
-  },
-  actions: {
-    color: theme.palette.text.secondary
-  },
-  title: {
-    flex: "0 0 auto"
-  }
-});
-
-let EnhancedTableToolbar = props => {
-  const { classes } = props;
-
-  return (
-    <Toolbar className={classNames(classes.root)}>
-      <div className={classes.title}>
-        <Typography variant="title" id="tableTitle">
-          Nutrition
-        </Typography>
-      </div>
-      <div className={classes.spacer} />
-      <div className={classes.actions}>
-        <Tooltip title="Filter list">
-          <IconButton aria-label="Filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      </div>
-    </Toolbar>
-  );
-};
-
-EnhancedTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
-
 const styles = theme => ({
   root: {
     width: "100%",
@@ -149,7 +89,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: "desc",
-    orderBy: "calories",
+    orderBy: "content0",
     data: recordData,
     page: 0,
     rowsPerPage: recordData.length
@@ -175,10 +115,9 @@ class EnhancedTable extends React.Component {
     const { data, order, orderBy, rowsPerPage, page } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-    var i = 1;
+    var jun = 1;
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -191,14 +130,65 @@ class EnhancedTable extends React.Component {
               {data.sort(getSorting(order, orderBy)).map(n => {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
-                    <TableCell numeric>{i++}</TableCell>
+                    <TableCell numeric padding="checkbox">
+                      {jun++}
+                    </TableCell>
                     <TableCell component="th" scope="row" padding="none">
                       {n.name}
                     </TableCell>
-                    <TableCell numeric>{n.contents[0]}</TableCell>
-                    <TableCell numeric>{n.contents[1]}</TableCell>
-                    <TableCell numeric>{n.contents[2]}</TableCell>
-                    <TableCell numeric>{n.contents[3]}</TableCell>
+                    <TableCell component="th" scope="row" padding="checkbox">
+                      {n.team}
+                    </TableCell>
+                    <TableCell numeric>{n.content0}</TableCell>
+                    <TableCell numeric>{n.content1}</TableCell>
+                    <TableCell numeric>{n.content2}</TableCell>
+                    <TableCell numeric>{n.content3}</TableCell>
+                    <TableCell numeric>{n.content4}</TableCell>
+                    <TableCell numeric>{n.content5}</TableCell>
+                    <TableCell numeric>{n.content6}</TableCell>
+                    <TableCell numeric>{n.content7}</TableCell>
+                    <TableCell numeric>{n.content8}</TableCell>
+                    <TableCell numeric>{n.content9}</TableCell>
+                    <TableCell numeric>{n.content10}</TableCell>
+                    <TableCell numeric>{n.content11}</TableCell>
+                    <TableCell numeric>{n.content12}</TableCell>
+                    <TableCell numeric>{n.content13}</TableCell>
+                    <TableCell numeric>{n.content14}</TableCell>
+                    <TableCell numeric>{n.content15}</TableCell>
+                    <TableCell numeric>{n.content16}</TableCell>
+                    <TableCell numeric>{n.content17}</TableCell>
+                    <TableCell numeric>{n.content18}</TableCell>
+                    <TableCell numeric>{n.content19}</TableCell>
+                    <TableCell numeric>{n.content20}</TableCell>
+                    <TableCell numeric>{n.content21}</TableCell>
+                    <TableCell numeric>{n.content22}</TableCell>
+                    <TableCell numeric>{n.content23}</TableCell>
+                    <TableCell numeric>{n.content24}</TableCell>
+                    <TableCell numeric>{n.content25}</TableCell>
+                    <TableCell numeric>{n.content26}</TableCell>
+                    <TableCell numeric>{n.content27}</TableCell>
+                    <TableCell numeric>{n.content28}</TableCell>
+                    <TableCell numeric>{n.content29}</TableCell>
+                    <TableCell numeric>{n.content30}</TableCell>
+                    <TableCell numeric>{n.content31}</TableCell>
+                    <TableCell numeric>{n.content32}</TableCell>
+                    <TableCell numeric>{n.content33}</TableCell>
+                    <TableCell numeric>{n.content34}</TableCell>
+                    <TableCell numeric>{n.content35}</TableCell>
+                    <TableCell numeric>{n.content36}</TableCell>
+                    <TableCell numeric>{n.content37}</TableCell>
+                    <TableCell numeric>{n.content38}</TableCell>
+                    <TableCell numeric>{n.content39}</TableCell>
+                    <TableCell numeric>{n.content40}</TableCell>
+                    <TableCell numeric>{n.content41}</TableCell>
+                    <TableCell numeric>{n.content42}</TableCell>
+                    <TableCell numeric>{n.content43}</TableCell>
+                    <TableCell numeric>{n.content44}</TableCell>
+                    <TableCell numeric>{n.content45}</TableCell>
+                    <TableCell numeric>{n.content46}</TableCell>
+                    <TableCell numeric>{n.content47}</TableCell>
+                    <TableCell numeric>{n.content48}</TableCell>
+                    <TableCell numeric>{n.content49}</TableCell>
                   </TableRow>
                 );
               })}
