@@ -1,4 +1,4 @@
-import obj from '../records.json';
+import obj from "../records.json";
 
 var records = obj.records;
 
@@ -122,7 +122,7 @@ export const rows = [
   {
     id: "name",
     numeric: false,
-    disablePadding: true,
+    disablePadding: false,
     label: "氏名"
   },
   {

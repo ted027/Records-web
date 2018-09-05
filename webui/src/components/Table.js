@@ -11,6 +11,36 @@ import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import { rows, recordData } from "./Records";
 
+const CustomTableRow = withStyles(theme => ({
+  head: {
+    position: "relative",
+    top: 0,
+  }
+}))(TableRow);
+
+const CustomTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    minWidth: 80
+  },
+  body: {
+    fontSize: 14,
+    minWidth: 80
+  }
+}))(TableCell);
+
+const CustomTableCellShort = withStyles(theme => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    minWidth: 24
+  },
+  body: {
+    fontSize: 14
+  }
+}))(TableCell);
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -37,30 +67,53 @@ class EnhancedTableHead extends React.Component {
 
     return (
       <TableHead>
-        <TableRow>
+        <CustomTableRow>
           {rows.map(row => {
-            return (
-              <TableCell
-                key={row.id}
-                numeric={row.numeric}
-                padding={row.disablePadding ? "none" : "default"}
-              >
-                <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? "bottom-end" : "bottom-start"}
-                  enterDelay={300}
+            if (row.id === "order" || row.id === "team") {
+              return (
+                <CustomTableCellShort
+                  key={row.id}
+                  numeric={row.numeric}
+                  padding={row.disablePadding ? "checkbox" : "none"}
                 >
-                  <TableSortLabel
-                    direction={order}
-                    onClick={this.createSortHandler(row.id)}
+                  {row.label}
+                </CustomTableCellShort>
+              );
+            } else if (row.id === "name") {
+              return (
+                <CustomTableCell
+                  key={row.id}
+                  numeric={row.numeric}
+                  padding={row.disablePadding ? "checkbox" : "none"}
+                >
+                  {row.label}
+                </CustomTableCell>
+              );
+            }
+            {
+              return (
+                <CustomTableCell
+                  key={row.id}
+                  numeric={row.numeric}
+                  padding={row.disablePadding ? "checkbox" : "none"}
+                >
+                  <Tooltip
+                    title="Sort"
+                    placement={row.numeric ? "bottom-end" : "bottom-start"}
+                    enterDelay={300}
                   >
-                    {row.label}
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-            );
+                    <TableSortLabel
+                      direction={order}
+                      onClick={this.createSortHandler(row.id)}
+                    >
+                      {row.label}
+                    </TableSortLabel>
+                  </Tooltip>
+                </CustomTableCell>
+              );
+            }
           }, this)}
-        </TableRow>
+        </CustomTableRow>
       </TableHead>
     );
   }
@@ -79,7 +132,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 100
+    minWidth: 1020
   },
   tableWrapper: {
     overflowX: "auto"
@@ -102,14 +155,6 @@ class EnhancedTable extends React.Component {
     this.setState({ order, orderBy });
   };
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
-
   render() {
     const { classes } = this.props;
     const { data, order, orderBy, rowsPerPage, page } = this.state;
@@ -130,65 +175,169 @@ class EnhancedTable extends React.Component {
               {data.sort(getSorting(order, orderBy)).map(n => {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
-                    <TableCell numeric padding="checkbox">
+                    <CustomTableCellShort numeric padding="checkbox">
                       {jun++}
-                    </TableCell>
-                    <TableCell component="th" scope="row" padding="none">
+                    </CustomTableCellShort>
+                    <CustomTableCell component="th" scope="row" padding="none">
                       {n.name}
-                    </TableCell>
-                    <TableCell component="th" scope="row" padding="checkbox">
+                    </CustomTableCell>
+                    <CustomTableCellShort
+                      component="th"
+                      scope="row"
+                      padding="checkbox"
+                    >
                       {n.team}
-                    </TableCell>
-                    <TableCell numeric>{n.content0}</TableCell>
-                    <TableCell numeric>{n.content1}</TableCell>
-                    <TableCell numeric>{n.content2}</TableCell>
-                    <TableCell numeric>{n.content3}</TableCell>
-                    <TableCell numeric>{n.content4}</TableCell>
-                    <TableCell numeric>{n.content5}</TableCell>
-                    <TableCell numeric>{n.content6}</TableCell>
-                    <TableCell numeric>{n.content7}</TableCell>
-                    <TableCell numeric>{n.content8}</TableCell>
-                    <TableCell numeric>{n.content9}</TableCell>
-                    <TableCell numeric>{n.content10}</TableCell>
-                    <TableCell numeric>{n.content11}</TableCell>
-                    <TableCell numeric>{n.content12}</TableCell>
-                    <TableCell numeric>{n.content13}</TableCell>
-                    <TableCell numeric>{n.content14}</TableCell>
-                    <TableCell numeric>{n.content15}</TableCell>
-                    <TableCell numeric>{n.content16}</TableCell>
-                    <TableCell numeric>{n.content17}</TableCell>
-                    <TableCell numeric>{n.content18}</TableCell>
-                    <TableCell numeric>{n.content19}</TableCell>
-                    <TableCell numeric>{n.content20}</TableCell>
-                    <TableCell numeric>{n.content21}</TableCell>
-                    <TableCell numeric>{n.content22}</TableCell>
-                    <TableCell numeric>{n.content23}</TableCell>
-                    <TableCell numeric>{n.content24}</TableCell>
-                    <TableCell numeric>{n.content25}</TableCell>
-                    <TableCell numeric>{n.content26}</TableCell>
-                    <TableCell numeric>{n.content27}</TableCell>
-                    <TableCell numeric>{n.content28}</TableCell>
-                    <TableCell numeric>{n.content29}</TableCell>
-                    <TableCell numeric>{n.content30}</TableCell>
-                    <TableCell numeric>{n.content31}</TableCell>
-                    <TableCell numeric>{n.content32}</TableCell>
-                    <TableCell numeric>{n.content33}</TableCell>
-                    <TableCell numeric>{n.content34}</TableCell>
-                    <TableCell numeric>{n.content35}</TableCell>
-                    <TableCell numeric>{n.content36}</TableCell>
-                    <TableCell numeric>{n.content37}</TableCell>
-                    <TableCell numeric>{n.content38}</TableCell>
-                    <TableCell numeric>{n.content39}</TableCell>
-                    <TableCell numeric>{n.content40}</TableCell>
-                    <TableCell numeric>{n.content41}</TableCell>
-                    <TableCell numeric>{n.content42}</TableCell>
-                    <TableCell numeric>{n.content43}</TableCell>
-                    <TableCell numeric>{n.content44}</TableCell>
-                    <TableCell numeric>{n.content45}</TableCell>
-                    <TableCell numeric>{n.content46}</TableCell>
-                    <TableCell numeric>{n.content47}</TableCell>
-                    <TableCell numeric>{n.content48}</TableCell>
-                    <TableCell numeric>{n.content49}</TableCell>
+                    </CustomTableCellShort>
+                    <CustomTableCell numeric padding="none">
+                      {n.content0}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content1}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content2}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content3}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content4}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content5}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content6}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content7}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content8}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content9}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content10}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content11}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content12}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content13}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content14}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content15}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content16}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content17}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content18}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content19}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content20}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content21}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content22}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content23}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content24}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content25}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content26}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content27}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content28}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content29}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content30}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content31}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content32}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content33}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content34}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content35}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content36}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content37}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content38}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content39}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content40}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content41}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content42}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content43}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content44}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content45}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content46}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content47}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content48}
+                    </CustomTableCell>
+                    <CustomTableCell numeric padding="none">
+                      {n.content49}
+                    </CustomTableCell>
                   </TableRow>
                 );
               })}
