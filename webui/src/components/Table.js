@@ -11,22 +11,46 @@ import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import { rows, recordData } from "./Records";
 
-const CustomTableRow = withStyles(theme => ({
-  head: {
-    position: "relative",
-    top: 0,
-  }
-}))(TableRow);
-
-const CustomTableCell = withStyles(theme => ({
+const CustomTableCellOrder = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 80
+    minWidth: 15,
+    position: "-webkit-sticky",
+    position: "sticky",
+    left: 0,
+    top: 0,
+    zindex: 3
   },
   body: {
+    // backgroundColor: theme.palette.common.white,
     fontSize: 14,
-    minWidth: 80
+    position: "-webkit-sticky",
+    position: "sticky",
+    left: 0,
+    zindex: 1
+  }
+}))(TableCell);
+
+const CustomTableCellName = withStyles(theme => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    minWidth: 80,
+    position: "-webkit-sticky",
+    position: "sticky",
+    left: 40,
+    top: 0,
+    zindex: 3
+  },
+  body: {
+    // backgroundColor: theme.palette.common.white,
+    fontSize: 14,
+    minWidth: 80,
+    position: "-webkit-sticky",
+    position: "sticky",
+    left: 40,
+    zindex: 1
   }
 }))(TableCell);
 
@@ -34,10 +58,32 @@ const CustomTableCellShort = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 24
+    minWidth: 24,
+    position: "-webkit-sticky",
+    position: "sticky",
+    top: 0,
+    zindex: 2
   },
   body: {
-    fontSize: 14
+    fontSize: 14,
+    zindex: 0
+  }
+}))(TableCell);
+
+const CustomTableCell = withStyles(theme => ({
+  head: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    minWidth: 80,
+    position: "-webkit-sticky",
+    position: "sticky",
+    top: 0,
+    zindex: 2
+  },
+  body: {
+    fontSize: 14,
+    minWidth: 80,
+    zindex: 0
   }
 }))(TableCell);
 
@@ -67,9 +113,9 @@ class EnhancedTableHead extends React.Component {
 
     return (
       <TableHead>
-        <CustomTableRow>
+        <TableRow>
           {rows.map(row => {
-            if (row.id === "order" || row.id === "team") {
+            if (row.id === "team") {
               return (
                 <CustomTableCellShort
                   key={row.id}
@@ -79,18 +125,27 @@ class EnhancedTableHead extends React.Component {
                   {row.label}
                 </CustomTableCellShort>
               );
-            } else if (row.id === "name") {
+            } else if (row.id === "order") {
               return (
-                <CustomTableCell
+                <CustomTableCellOrder
                   key={row.id}
                   numeric={row.numeric}
                   padding={row.disablePadding ? "checkbox" : "none"}
                 >
                   {row.label}
-                </CustomTableCell>
+                </CustomTableCellOrder>
               );
-            }
-            {
+            } else if (row.id === "name") {
+              return (
+                <CustomTableCellName
+                  key={row.id}
+                  numeric={row.numeric}
+                  padding={row.disablePadding ? "checkbox" : "none"}
+                >
+                  {row.label}
+                </CustomTableCellName>
+              );
+            } else {
               return (
                 <CustomTableCell
                   key={row.id}
@@ -113,7 +168,7 @@ class EnhancedTableHead extends React.Component {
               );
             }
           }, this)}
-        </CustomTableRow>
+        </TableRow>
       </TableHead>
     );
   }
@@ -132,7 +187,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 1020
+    minWidth: 1020,
   },
   tableWrapper: {
     overflowX: "auto"
@@ -175,12 +230,16 @@ class EnhancedTable extends React.Component {
               {data.sort(getSorting(order, orderBy)).map(n => {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
-                    <CustomTableCellShort numeric padding="checkbox">
+                    <CustomTableCellOrder numeric padding="checkbox">
                       {jun++}
-                    </CustomTableCellShort>
-                    <CustomTableCell component="th" scope="row" padding="none">
+                    </CustomTableCellOrder>
+                    <CustomTableCellName
+                      component="th"
+                      scope="row"
+                      padding="none"
+                    >
                       {n.name}
-                    </CustomTableCell>
+                    </CustomTableCellName>
                     <CustomTableCellShort
                       component="th"
                       scope="row"
