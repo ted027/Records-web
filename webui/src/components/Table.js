@@ -23,7 +23,7 @@ const CustomTableCellOrder = withStyles(theme => ({
     zindex: 3
   },
   body: {
-    // backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.white,
     fontSize: 14,
     position: "-webkit-sticky",
     position: "sticky",
@@ -44,11 +44,11 @@ const CustomTableCellName = withStyles(theme => ({
     zindex: 3
   },
   body: {
-    // backgroundColor: theme.palette.common.white,
+    backgroundColor: theme.palette.common.white,
     fontSize: 14,
-    minWidth: 80,
     position: "-webkit-sticky",
     position: "sticky",
+    minWidth: 80,
     left: 40,
     zindex: 1
   }
@@ -58,10 +58,9 @@ const CustomTableCellShort = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 24,
     position: "-webkit-sticky",
     position: "sticky",
-    top: 0,
+    minWidth: 24,
     zindex: 2
   },
   body: {
@@ -74,10 +73,9 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 80,
     position: "-webkit-sticky",
     position: "sticky",
-    top: 0,
+    minWidth: 80,
     zindex: 2
   },
   body: {
@@ -97,6 +95,16 @@ function desc(a, b, orderBy) {
   return 0;
 }
 
+function stableSort(array, cmp) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = cmp(a[0], b[0]);
+    if (order !== 0) return order;
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map(el => el[0]);
+}
+
 function getSorting(order, orderBy) {
   return order === "desc"
     ? (a, b) => desc(a, b, orderBy)
@@ -109,7 +117,7 @@ class EnhancedTableHead extends React.Component {
   };
 
   render() {
-    const { order } = this.props;
+    const { order, orderBy } = this.props;
 
     return (
       <TableHead>
@@ -151,6 +159,7 @@ class EnhancedTableHead extends React.Component {
                   key={row.id}
                   numeric={row.numeric}
                   padding={row.disablePadding ? "checkbox" : "none"}
+                  sortDirection={orderBy === row.id ? order : false}
                 >
                   <Tooltip
                     title="Sort"
@@ -158,6 +167,7 @@ class EnhancedTableHead extends React.Component {
                     enterDelay={300}
                   >
                     <TableSortLabel
+                      active={orderBy === row.id}
                       direction={order}
                       onClick={this.createSortHandler(row.id)}
                     >
@@ -187,7 +197,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3
   },
   table: {
-    minWidth: 1020,
+    minWidth: 1020
   },
   tableWrapper: {
     overflowX: "auto"
@@ -206,6 +216,10 @@ class EnhancedTable extends React.Component {
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = "desc";
+
+    if (this.state.orderBy === property && this.state.order === 'desc') {
+      order = 'asc';
+    }
 
     this.setState({ order, orderBy });
   };
@@ -227,7 +241,7 @@ class EnhancedTable extends React.Component {
               rowCount={data.length}
             />
             <TableBody>
-              {data.sort(getSorting(order, orderBy)).map(n => {
+              {stableSort(data, getSorting(order, orderBy)).map(n => {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
                     <CustomTableCellOrder numeric padding="checkbox">
