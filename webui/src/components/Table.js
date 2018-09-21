@@ -100,16 +100,12 @@ function getSorting(order, orderBy) {
 
 class EnhancedTableHead extends React.Component {
 
-  state = {
-    rows: hrows
-  };
-
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order, orderBy, rows } = this.props;
 
     return (
       <TableHead>
@@ -176,7 +172,8 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  rows: PropTypes.array.isRequired
 };
 
 const styles = theme => ({
@@ -201,29 +198,34 @@ class EnhancedTable extends React.Component {
   state = {
     order: "desc",
     orderBy: "content0",
+    rows: hrows,
     data: crecordData,
     page: 0,
-    rowsPerPage: recordData.length,
+    rowsPerPage: crecordData.length,
     selected: 0,
   };
 
   handleChange = (event, selected) => {
-    this.setState({ selected });
-
-    if (selected == 0){
-      this.state.data = crecordData;
-      EnhancedTableHead.state.rows = hrows;
-    } else if (selected == 1){
-      this.state.data = cprecordData;
-      EnhancedTableHead.state.rows = prows;
-    } else if (selected == 2) {
-      this.state.data = precordData;
-      EnhancedTableHead.state.rows = hrows;
-    } else if (selected == 3) {
-      this.state.data = pprecordData;
-      EnhancedTableHead.state.rows = prows;
+    var data;
+    var rows;
+    var rowsPerPage;
+    
+    if (selected === 0){
+      data = crecordData;
+      rows = hrows;
+    } else if (selected === 1){
+      data = cprecordData;
+      rows = prows;
+    } else if (selected === 2) {
+      data = precordData;
+      rows = hrows;
+    } else if (selected === 3) {
+      data = pprecordData;
+      rows = prows;
     }
-
+    rowsPerPage = data.length;
+    
+    this.setState({ selected, data, rows, rowsPerPage });
   };
 
   handleRequestSort = (event, property) => {
@@ -239,7 +241,7 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, rowsPerPage, page, selected } = this.state;
+    const { data, order, orderBy, rowsPerPage, page, selected, rows } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
     var jun;
@@ -270,6 +272,7 @@ class EnhancedTable extends React.Component {
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
               rowCount={data.length}
+              rows={rows}
             />
             <TableBody>
               {stableSort(data, getSorting(order, orderBy)).map(n => {

@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import './App.css';
 // import Filter from './components/Filter';
 import Table from './components/Table';
-import Tabs from './components/Tabs';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const styles = theme => ({
@@ -22,7 +21,6 @@ class App extends Component {
     return (
       <MuiThemeProvider>
       <div className="App">
-          <Tabs />
           <Table />
       </div>
       </MuiThemeProvider>

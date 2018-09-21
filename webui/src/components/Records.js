@@ -151,55 +151,55 @@ for (var i = 0; i < lists.length; i++) {
   });
 }
 
-for (var i = 0; i < plists.length; i++) {
+for (var j = 0; j < plists.length; j++) {
   prows.push({
-    id: "content" + i,
+    id: "content" + j,
     numeric: true,
     disablePadding: false,
-    label: plists[i]
+    label: plists[j]
   });
 }
 
 export const crecordData = [];
-for (var j = 1; j < crecords.length; j++) {
+for (var ci = 1; ci < crecords.length; ci++) {
   crecordData.push(
     createData(
-      crecords[j][0],
-      crecords[j][1],
-      crecords[j].slice(2, crecords[0].length)
+      crecords[ci][0],
+      crecords[ci][1],
+      crecords[ci].slice(2, crecords[0].length)
     )
   );
 }
 
 export const cprecordData = [];
-for (var j = 1; j < cprecords.length; j++) {
+for (var cpi = 1; cpi < cprecords.length; cpi++) {
   cprecordData.push(
     createData(
-      cprecords[j][0],
-      cprecords[j][1],
-      cprecords[j].slice(2, cprecords[0].length)
+      cprecords[cpi][0],
+      cprecords[cpi][1],
+      cprecords[cpi].slice(2, cprecords[0].length)
     )
   );
 }
 
 export const precordData = [];
-for (var j = 1; j < precords.length; j++) {
+for (var pi = 1; pi < precords.length; pi++) {
   precordData.push(
     createData(
-      precords[j][0],
-      precords[j][1],
-      precords[j].slice(2, precords[0].length)
+      precords[pi][0],
+      precords[pi][1],
+      precords[pi].slice(2, precords[0].length)
     )
   );
 }
 
 export const pprecordData = [];
-for (var j = 1; j < pprecords.length; j++) {
+for (var ppi = 1; ppi < pprecords.length; ppi++) {
   pprecordData.push(
     createData(
-      pprecords[j][0],
-      pprecords[j][1],
-      pprecords[j].slice(2, pprecords[0].length)
+      pprecords[ppi][0],
+      pprecords[ppi][1],
+      pprecords[ppi].slice(2, pprecords[0].length)
     )
   );
 }
