@@ -9,7 +9,10 @@ import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
-import { rows, recordData } from "./Records";
+import { hrows, prows, crecordData, cprecordData, precordData, pprecordData } from "./Records";
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 const CustomTableCellOrder = withStyles(theme => ({
   head: {
@@ -79,16 +82,6 @@ const CustomTableCell = withStyles(theme => ({
   }
 }))(TableCell);
 
-function desc(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
 function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -100,18 +93,19 @@ function stableSort(array, cmp) {
 }
 
 function getSorting(order, orderBy) {
-  return order === "desc"
-    ? (a, b) => desc(a, b, orderBy)
-    : (a, b) => -desc(a, b, orderBy);
+  return order === "asc"
+    ? (a, b) => a[orderBy] - b[orderBy]
+    : (a, b) => b[orderBy] - a[orderBy];
 }
 
 class EnhancedTableHead extends React.Component {
+
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { order, orderBy } = this.props;
+    const { order, orderBy, rows } = this.props;
 
     return (
       <TableHead>
@@ -160,11 +154,7 @@ class EnhancedTableHead extends React.Component {
                     placement={row.numeric ? "bottom-end" : "bottom-start"}
                     enterDelay={300}
                   >
-                    <TableSortLabel
-                      active={orderBy === row.id}
-                      direction={order}
-                      onClick={this.createSortHandler(row.id)}
-                    >
+                    <TableSortLabel onClick={this.createSortHandler(row.id)}>
                       {row.label}
                     </TableSortLabel>
                   </Tooltip>
@@ -182,7 +172,8 @@ EnhancedTableHead.propTypes = {
   onRequestSort: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  rows: PropTypes.array.isRequired
 };
 
 const styles = theme => ({
@@ -195,24 +186,54 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: "auto"
-  }
+  },
+  tab: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
 });
 
 class EnhancedTable extends React.Component {
+
   state = {
     order: "desc",
     orderBy: "content0",
-    data: recordData,
+    rows: hrows,
+    data: crecordData,
     page: 0,
-    rowsPerPage: recordData.length
+    rowsPerPage: crecordData.length,
+    selected: 0,
+  };
+
+  handleChange = (event, selected) => {
+    var data;
+    var rows;
+    var rowsPerPage;
+    
+    if (selected === 0){
+      data = crecordData;
+      rows = hrows;
+    } else if (selected === 1){
+      data = cprecordData;
+      rows = prows;
+    } else if (selected === 2) {
+      data = precordData;
+      rows = hrows;
+    } else if (selected === 3) {
+      data = pprecordData;
+      rows = prows;
+    }
+    rowsPerPage = data.length;
+    
+    this.setState({ selected, data, rows, rowsPerPage });
   };
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = "desc";
 
-    if (this.state.orderBy === property && this.state.order === 'desc') {
-      order = 'asc';
+    if (this.state.orderBy === property && this.state.order === "desc") {
+      order = "asc";
     }
 
     this.setState({ order, orderBy });
@@ -220,12 +241,30 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, rowsPerPage, page } = this.state;
+    const { data, order, orderBy, rowsPerPage, page, selected, rows } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
-    var jun = 1;
+    var jun;
+    var add;
+    if (order === "asc") {
+      jun = data.length+1;
+      add = -1;
+    } else {
+      jun = 0;
+      add = 1;
+    }
     return (
       <Paper className={classes.root}>
+      <div className={classes.tab}>
+          <AppBar position="static">
+            <Tabs selected={selected} onChange={this.handleChange}>
+              <Tab label="CENTRAL HITTERS" />
+              <Tab label="CENTRAL PITCHERS" />
+              <Tab label="PACIFIC HITTERS" />
+              <Tab label="PACIFIC PITCHERS" />
+            </Tabs>
+          </AppBar>
+        </div>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -233,13 +272,14 @@ class EnhancedTable extends React.Component {
               orderBy={orderBy}
               onRequestSort={this.handleRequestSort}
               rowCount={data.length}
+              rows={rows}
             />
             <TableBody>
               {stableSort(data, getSorting(order, orderBy)).map(n => {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
                     <CustomTableCellOrder numeric padding="checkbox">
-                      {jun++}
+                      {jun=jun+add}
                     </CustomTableCellOrder>
                     <CustomTableCellName
                       component="th"

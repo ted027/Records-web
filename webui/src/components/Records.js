@@ -1,6 +1,12 @@
-import obj from "../records.json";
+import cobj from "../crecords.json";
+import cpobj from "../cprecords.json";
+import pobj from "../precords.json";
+import ppobj from "../pprecords.json";
 
-var records = obj.records;
+var crecords = cobj.records;
+var cprecords = cpobj.records;
+var precords = pobj.records;
+var pprecords = ppobj.records;
 
 let counter = 0;
 function createData(name, team, contents) {
@@ -111,9 +117,10 @@ function createData(name, team, contents) {
     content49
   };
 }
-var lists = records[0].slice(2, records[0].length);
+var lists = crecords[0].slice(2, crecords[0].length);
+var plists = cprecords[0].slice(2, cprecords[0].length);
 
-export const rows = [
+export const hrows = [
   {
     id: "order",
     numeric: false,
@@ -133,8 +140,10 @@ export const rows = [
   }
 ];
 
+export const prows = hrows;
+
 for (var i = 0; i < lists.length; i++) {
-  rows.push({
+  hrows.push({
     id: "content" + i,
     numeric: true,
     disablePadding: false,
@@ -142,13 +151,55 @@ for (var i = 0; i < lists.length; i++) {
   });
 }
 
-export const recordData = [];
-for (var j = 1; j < records.length; j++) {
-  recordData.push(
+for (var j = 0; j < plists.length; j++) {
+  prows.push({
+    id: "content" + j,
+    numeric: true,
+    disablePadding: false,
+    label: plists[j]
+  });
+}
+
+export const crecordData = [];
+for (var ci = 1; ci < crecords.length; ci++) {
+  crecordData.push(
     createData(
-      records[j][0],
-      records[j][1],
-      records[j].slice(2, records[0].length)
+      crecords[ci][0],
+      crecords[ci][1],
+      crecords[ci].slice(2, crecords[0].length)
+    )
+  );
+}
+
+export const cprecordData = [];
+for (var cpi = 1; cpi < cprecords.length; cpi++) {
+  cprecordData.push(
+    createData(
+      cprecords[cpi][0],
+      cprecords[cpi][1],
+      cprecords[cpi].slice(2, cprecords[0].length)
+    )
+  );
+}
+
+export const precordData = [];
+for (var pi = 1; pi < precords.length; pi++) {
+  precordData.push(
+    createData(
+      precords[pi][0],
+      precords[pi][1],
+      precords[pi].slice(2, precords[0].length)
+    )
+  );
+}
+
+export const pprecordData = [];
+for (var ppi = 1; ppi < pprecords.length; ppi++) {
+  pprecordData.push(
+    createData(
+      pprecords[ppi][0],
+      pprecords[ppi][1],
+      pprecords[ppi].slice(2, pprecords[0].length)
     )
   );
 }
