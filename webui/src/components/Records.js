@@ -140,7 +140,7 @@ export const hrows = [
   }
 ];
 
-export const prows = hrows;
+export const prows = hrows.concat();
 
 for (var i = 0; i < lists.length; i++) {
   hrows.push({
