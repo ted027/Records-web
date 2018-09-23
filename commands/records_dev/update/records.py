@@ -32,6 +32,7 @@ def records(ctx):
             del header[17:21]
             del header[2]
         else:
+            header = header[:36]
             del header[27:31]
         body = trs[1:]
 
@@ -48,6 +49,8 @@ def records(ctx):
             if (league == 'ctop' or league == 'ptop'):
                 del contents[16:20]
             else:
+                contents = contents[:36]
+                contents[1] = contents[1][:1]
                 del contents[27:31]
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
@@ -62,6 +65,8 @@ def records(ctx):
             i for i in strs[0].text.replace("\r", "").replace(" ", "").split("\n")
             if i != ""
         ]
+        if 'HIDARITU' in sabr:
+            sheader = sheader[:19]
         del sheader[:5]
         records_index[0].extend(sheader)
         sbody = strs[1:]
@@ -71,6 +76,8 @@ def records(ctx):
                 i for i in raw_scontents.text.replace("\r", "").replace(" ", "")
                 .split("\n") if i != ""
             ]
+            if 'HIDARITU' in sabr:
+                scontents = scontents[:19]
             sname = scontents[0]
             del scontents[:5]
             if scontents[0] == sheader[0]:
@@ -83,12 +90,12 @@ def records(ctx):
 
                 record.extend(scontents)
 
-        # print(records_index)
         records_dict = {
             'records': records_index
         }
 
-        json_path = f'./webui/src/{league}records.json'
+        league_head = league.replace('top', '')
+        json_path = f'./webui/src/{league_head}records.json'
 
         f = open(json_path, 'w')
         json.dump(records_dict, f)
