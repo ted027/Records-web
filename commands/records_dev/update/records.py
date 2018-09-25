@@ -10,7 +10,7 @@ def records(ctx):
     baseurl = 'http://baseballdata.jp/'
 
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
-    sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/cNOI', 'sabr/cHIDARITU']    
+    sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
     for (league, sabr) in zip(leaguelist, sabrlist):
 
@@ -32,7 +32,7 @@ def records(ctx):
             del header[17:21]
             del header[2]
         else:
-            header = header[:36]
+            header = header[:35]
             del header[27:31]
         body = trs[1:]
 
@@ -49,7 +49,7 @@ def records(ctx):
             if (league == 'ctop' or league == 'ptop'):
                 del contents[16:20]
             else:
-                contents = contents[:36]
+                contents = contents[:35]
                 contents[1] = contents[1][:1]
                 del contents[27:31]
             contents[0] = contents[0].split(':')[1]

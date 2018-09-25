@@ -3,26 +3,26 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description : web and module bucket
 
 Resources:
-  module:
-    Type: AWS::S3::Bucket
-    DependoOn: log
-    Properties: 
-      AccessControl: Private
-      BucketName: records-module
-      LoggingConfiguration:
-        DestinationBucketName: !Ref log
-        LogFilePrefix: records/module/
-      Tags:
-        - { Key: version, Value: 1.0 }
+  # module:
+  #   Type: AWS::S3::Bucket
+  #   DependsOn: log
+  #   Properties: 
+  #     AccessControl: Private
+  #     BucketName: records-module
+  #     LoggingConfiguration:
+  #       DestinationBucketName: !Ref log
+  #       LogFilePrefix: records/module/
+  #     Tags:
+  #       - { Key: version, Value: 1.0 }
 
-  web:
+  RecordsWeb:
     Type: AWS::S3::Bucket
-    DependoOn: log
+    DependsOn: RecordsWebLog
     Properties: 
       AccessControl: PublicRead
-      BucketName: records-web
+      BucketName: records-web-hogeeee
       LoggingConfiguration:
-        DestinationBucketName: !Ref log
+        DestinationBucketName: !Ref RecordsWebLog
         LogFilePrefix: records/web/
       Tags:
         - { Key: version, Value: 1.0 }
@@ -30,11 +30,11 @@ Resources:
         ErrorDocument: error.html
         IndexDocument: index.html
 
-  log:
+  RecordsWebLog:
     Type: AWS::S3::Bucket
     Properties: 
       AccessControl: LogDeliveryWrite
-      BucketName: common-log
+      BucketName: records-web-hogeeee-log
       Tags:
         - { Key: version, Value: 0.0 }
 
@@ -42,7 +42,7 @@ Resources:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: 
-        Ref: web
+        Ref: RecordsWeb
       PolicyDocument:
         Statement:
         -
@@ -50,7 +50,14 @@ Resources:
           Action: s3:GetObject
           Effect: Allow
           Principal: '*'
-          Resource: rn:aws:s3:::web/*
+          Resource:
+            Fn::Join:
+            - ""
+            -
+              - "arn:aws:s3:::"
+              -
+                Ref: RecordsWeb
+              - "/*"
           # Condition:
           #   StringLike:
           #     aws:Referer:
