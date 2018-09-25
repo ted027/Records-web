@@ -162,6 +162,11 @@ class EnhancedTableHead extends React.Component {
               );
             }
           }, this)}
+          <CustomTableCellShort
+            component="th"
+            scope="row"
+            padding="checkbox"
+          />
         </TableRow>
       </TableHead>
     );
@@ -205,7 +210,7 @@ class EnhancedTable extends React.Component {
     selected: 0,
   };
 
-  handleChange = (event, selected) => {
+  handleLeagueChange = (event, selected) => {
     var data;
     var rows;
     var rowsPerPage;
@@ -257,7 +262,7 @@ class EnhancedTable extends React.Component {
       <Paper className={classes.root}>
       <div className={classes.tab}>
           <AppBar position="static">
-            <Tabs selected={selected} onChange={this.handleChange}>
+            <Tabs selected={selected} onChange={this.handleLeagueChange}>
               <Tab label="CENTRAL HITTERS" />
               <Tab label="CENTRAL PITCHERS" />
               <Tab label="PACIFIC HITTERS" />
@@ -424,27 +429,39 @@ class EnhancedTable extends React.Component {
                     <CustomTableCell numeric padding="none">
                       {n.content42}
                     </CustomTableCell>
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content43}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content44}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content45}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content46}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content47}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content48}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content49}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    <CustomTableCellShort
+                      component="th"
+                      scope="row"
+                      padding="checkbox"
+                    />
                   </TableRow>
                 );
               })}
