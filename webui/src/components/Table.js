@@ -262,7 +262,12 @@ class EnhancedTable extends React.Component {
       <Paper className={classes.root}>
       <div className={classes.tab}>
           <AppBar position="static">
-            <Tabs selected={selected} onChange={this.handleLeagueChange}>
+            <Tabs
+              selected={selected}
+              scrollable
+              scrollButtons="auto"
+              onChange={this.handleLeagueChange}
+            >
               <Tab label="CENTRAL HITTERS" />
               <Tab label="CENTRAL PITCHERS" />
               <Tab label="PACIFIC HITTERS" />
