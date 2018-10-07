@@ -149,15 +149,9 @@ class EnhancedTableHead extends React.Component {
                   padding={row.disablePadding ? "checkbox" : "none"}
                   sortDirection={orderBy === row.id ? order : false}
                 >
-                  <Tooltip
-                    title="Sort"
-                    placement={row.numeric ? "bottom-end" : "bottom-start"}
-                    enterDelay={300}
-                  >
                     <TableSortLabel onClick={this.createSortHandler(row.id)}>
                       {row.label}
                     </TableSortLabel>
-                  </Tooltip>
                 </CustomTableCell>
               );
             }
