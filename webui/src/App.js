@@ -1,25 +1,24 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-// import Filter from './components/Filter';
 import Table from './components/Table';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
+import yellow from '@material-ui/core/colors/yellow'
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 1000,
-  },
+export const theme = createMuiTheme({
+  overrides: {
+    MuiTableSortLabel: {
+      root: {
+        color: yellow
+      }
+    }
+  }
 });
 
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
       <div className="App">
           <Table />
       </div>
