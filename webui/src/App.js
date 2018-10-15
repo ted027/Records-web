@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 import Table from './components/Table';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import yellow from '@material-ui/core/colors/yellow'
 
-export const theme = createMuiTheme({
+const theme = createMuiTheme({
   overrides: {
     MuiTableSortLabel: {
       root: {
-        color: yellow
+        color: yellow,
+      },
+      active: {
+        color: yellow,
       }
     }
   }

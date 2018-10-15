@@ -192,7 +192,6 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
   rows: PropTypes.array.isRequired,
-  classes: PropTypes.object.isRequired
 };
 
 class EnhancedTable extends React.Component {
