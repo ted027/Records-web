@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Table from './components/Table';
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { createMuiTheme } from '@material-ui/core/styles';
 import yellow from '@material-ui/core/colors/yellow'
 
 const theme = createMuiTheme({
