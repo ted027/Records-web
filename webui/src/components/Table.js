@@ -8,11 +8,28 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
 import { hrows, prows, crecordData, cprecordData, precordData, pprecordData } from "./Records";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import yellow from '@material-ui/core/colors/yellow';
+
+const styles = theme => ({
+  root: {
+    width: "100%",
+    marginTop: theme.spacing.unit * 3
+  },
+  table: {
+    minWidth: 1020
+  },
+  tableWrapper: {
+    overflowX: "auto"
+  },
+  tab: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+  },
+});
 
 const CustomTableCellOrder = withStyles(theme => ({
   head: {
@@ -72,15 +89,26 @@ const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 80,
+    minWidth: 90,
     zindex: 2
   },
   body: {
     fontSize: 14,
-    minWidth: 80,
+    minWidth: 90,
     zindex: 0
   }
 }))(TableCell);
+
+const CustomTableSortLabel = withStyles({
+  root: {
+    "&:hover": {
+      color: yellow[600]
+    },
+    "&:focus": {
+      color: yellow[600]
+    }
+  }
+})(TableSortLabel);
 
 function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
@@ -147,11 +175,14 @@ class EnhancedTableHead extends React.Component {
                   key={row.id}
                   numeric={row.numeric}
                   padding={row.disablePadding ? "checkbox" : "none"}
+                  // one more branch (era etc..)
                   sortDirection={orderBy === row.id ? order : false}
                 >
-                    <TableSortLabel onClick={this.createSortHandler(row.id)}>
-                      {row.label}
-                    </TableSortLabel>
+                <CustomTableSortLabel
+                  onClick={this.createSortHandler(row.id)}
+                  >
+                  {row.label}
+                    </CustomTableSortLabel>
                 </CustomTableCell>
               );
             }
@@ -172,25 +203,8 @@ EnhancedTableHead.propTypes = {
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
-  rows: PropTypes.array.isRequired
+  rows: PropTypes.array.isRequired,
 };
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3
-  },
-  table: {
-    minWidth: 1020
-  },
-  tableWrapper: {
-    overflowX: "auto"
-  },
-  tab: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-});
 
 class EnhancedTable extends React.Component {
 
