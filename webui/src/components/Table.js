@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes, { exact } from "prop-types";
+import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,6 +12,7 @@ import { hrows, prows, crecordData, cprecordData, precordData, pprecordData } fr
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import yellow from '@material-ui/core/colors/yellow';
 
 const styles = theme => ({
   root: {
@@ -98,6 +99,17 @@ const CustomTableCell = withStyles(theme => ({
   }
 }))(TableCell);
 
+const CustomTableSortLabel = withStyles({
+  root: {
+    "&:hover": {
+      color: yellow[600]
+    },
+    "&:focus": {
+      color: yellow[600]
+    }
+  }
+})(TableSortLabel);
+
 function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -166,11 +178,11 @@ class EnhancedTableHead extends React.Component {
                   // one more branch (era etc..)
                   sortDirection={orderBy === row.id ? order : false}
                 >
-                <TableSortLabel
+                <CustomTableSortLabel
                   onClick={this.createSortHandler(row.id)}
                   >
                   {row.label}
-                    </TableSortLabel>
+                    </CustomTableSortLabel>
                 </CustomTableCell>
               );
             }
