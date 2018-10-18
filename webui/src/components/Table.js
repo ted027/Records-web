@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import { hrows, prows, crecordData, cprecordData, precordData, pprecordData, defaultAscListP } from "./Records";
+import { hrows, prows, crecordData, cprecordData, precordData, pprecordData, defaultAscListH, defaultAscListP } from "./Records";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -35,7 +35,8 @@ const CustomTableCellOrder = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 15,
+    minWidth: 20,
+    maxWidth: 20,
     position: "-webkit-sticky",
     position: "sticky",
     left: 0,
@@ -58,7 +59,7 @@ const CustomTableCellName = withStyles(theme => ({
     minWidth: 90,
     position: "-webkit-sticky",
     position: "sticky",
-    left: 30,
+    left: 44,
     zindex: 3
   },
   body: {
@@ -67,7 +68,7 @@ const CustomTableCellName = withStyles(theme => ({
     position: "-webkit-sticky",
     position: "sticky",
     minWidth: 90,
-    left: 30,
+    left: 44,
     zindex: 1
   }
 }))(TableCell);
@@ -177,11 +178,11 @@ class EnhancedTableHead extends React.Component {
                   padding={row.disablePadding ? "checkbox" : "none"}
                   sortDirection={orderBy === row.id ? order : false}
                 >
-                <CustomTableSortLabel
-                  onClick={this.createSortHandler(row.id)}
+                  <CustomTableSortLabel
+                    onClick={this.createSortHandler(row.id)}
                   >
-                  {row.label}
-                    </CustomTableSortLabel>
+                    {row.label}
+                  </CustomTableSortLabel>
                 </CustomTableCell>
               );
             }
@@ -222,12 +223,12 @@ class EnhancedTable extends React.Component {
     var order;
     var orderBy;
     var orderMean;
-    
-    if (selected === 0){
+
+    if (selected === 0) {
       data = crecordData;
       rows = hrows;
       order = "desc";
-    } else if (selected === 1){
+    } else if (selected === 1) {
       data = cprecordData;
       rows = prows;
       order = "asc";
@@ -242,15 +243,15 @@ class EnhancedTable extends React.Component {
     }
     orderBy = "content0";
     orderMean = "good";
-    
-    this.setState({ selected, data, rows, order, orderBy });
+
+    this.setState({ selected, data, rows, order, orderBy, orderMean });
   };
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
     var firstOrder;
     var reverseOrder;
-    if (this.state.selected % 2 && defaultAscListP.indexOf(property) >= 0){
+    if (this.state.selected % 2 && defaultAscListP.indexOf(property) >= 0) {
       firstOrder = "asc";
       reverseOrder = "desc";
     } else {
@@ -274,7 +275,7 @@ class EnhancedTable extends React.Component {
     var jun;
     var add;
     if (orderMean === "bad") {
-      jun = data.length+1;
+      jun = data.length + 1;
       add = -1;
     } else {
       jun = 0;
@@ -282,7 +283,7 @@ class EnhancedTable extends React.Component {
     }
     return (
       <Paper className={classes.root}>
-      <div className={classes.tab}>
+        <div className={classes.tab}>
           <AppBar position="static">
             <Tabs
               selected={selected}
@@ -311,7 +312,7 @@ class EnhancedTable extends React.Component {
                 return (
                   <TableRow hover tabIndex={-1} key={n.id}>
                     <CustomTableCellOrder numeric padding="checkbox">
-                      {jun=jun+add}
+                      {jun = jun + add}
                     </CustomTableCellOrder>
                     <CustomTableCellName
                       component="th"
@@ -457,33 +458,33 @@ class EnhancedTable extends React.Component {
                       {n.content42}
                     </CustomTableCell>
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content43}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content43}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content44}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content44}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content45}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content45}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content46}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content46}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content47}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content47}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content48}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content48}
+                      </CustomTableCell>)}
                     {selected % 2 === 0 && (
-                    <CustomTableCell numeric padding="none">
-                      {n.content49}
-                    </CustomTableCell>)}
+                      <CustomTableCell numeric padding="none">
+                        {n.content49}
+                      </CustomTableCell>)}
                     <CustomTableCellShort
                       component="th"
                       scope="row"

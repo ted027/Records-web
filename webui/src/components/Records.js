@@ -160,9 +160,25 @@ for (var j = 0; j < plists.length; j++) {
   });
 }
 
+export const defaultAscListH = [
+  "content40",
+]
+
 export const defaultAscListP = [
   "content0",
   "content2",
+  "content20",
+  "content24",
+  "content29", //double
+  "content30",
+  "content31",
+  "content32",
+  "content35",
+  "content37",
+  "content38",
+  "content39",
+  "content40",
+  "content42",
 ]
 
 export const crecordData = [];
