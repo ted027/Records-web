@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
-import { hrows, prows, crecordData, cprecordData, precordData, pprecordData } from "./Records";
+import { hrows, prows, crecordData, cprecordData, precordData, pprecordData, defaultAscListP } from "./Records";
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -55,10 +55,10 @@ const CustomTableCellName = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    minWidth: 80,
+    minWidth: 90,
     position: "-webkit-sticky",
     position: "sticky",
-    left: 40,
+    left: 30,
     zindex: 3
   },
   body: {
@@ -66,8 +66,8 @@ const CustomTableCellName = withStyles(theme => ({
     fontSize: 14,
     position: "-webkit-sticky",
     position: "sticky",
-    minWidth: 80,
-    left: 40,
+    minWidth: 90,
+    left: 30,
     zindex: 1
   }
 }))(TableCell);
@@ -175,7 +175,6 @@ class EnhancedTableHead extends React.Component {
                   key={row.id}
                   numeric={row.numeric}
                   padding={row.disablePadding ? "checkbox" : "none"}
-                  // one more branch (era etc..)
                   sortDirection={orderBy === row.id ? order : false}
                 >
                 <CustomTableSortLabel
@@ -211,55 +210,70 @@ class EnhancedTable extends React.Component {
   state = {
     order: "desc",
     orderBy: "content0",
+    orderMean: "good",
     rows: hrows,
     data: crecordData,
-    page: 0,
-    rowsPerPage: crecordData.length,
     selected: 0,
   };
 
   handleLeagueChange = (event, selected) => {
     var data;
     var rows;
-    var rowsPerPage;
+    var order;
+    var orderBy;
+    var orderMean;
     
     if (selected === 0){
       data = crecordData;
       rows = hrows;
+      order = "desc";
     } else if (selected === 1){
       data = cprecordData;
       rows = prows;
+      order = "asc";
     } else if (selected === 2) {
       data = precordData;
       rows = hrows;
+      order = "desc";
     } else if (selected === 3) {
       data = pprecordData;
       rows = prows;
+      order = "asc";
     }
-    rowsPerPage = data.length;
+    orderBy = "content0";
+    orderMean = "good";
     
-    this.setState({ selected, data, rows, rowsPerPage });
+    this.setState({ selected, data, rows, order, orderBy });
   };
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
-    let order = "desc";
+    var firstOrder;
+    var reverseOrder;
+    if (this.state.selected % 2 && defaultAscListP.indexOf(property) >= 0){
+      firstOrder = "asc";
+      reverseOrder = "desc";
+    } else {
+      firstOrder = "desc";
+      reverseOrder = "asc";
+    }
+    let order = firstOrder;
+    let orderMean = "good";
 
-    if (this.state.orderBy === property && this.state.order === "desc") {
-      order = "asc";
+    if (this.state.orderBy === property && this.state.order === firstOrder) {
+      order = reverseOrder;
+      orderMean = "bad";
     }
 
-    this.setState({ order, orderBy });
+    this.setState({ order, orderBy, orderMean });
   };
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, rowsPerPage, page, selected, rows } = this.state;
-    const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+    const { data, order, orderBy, selected, rows, orderMean } = this.state;
     var jun;
     var add;
-    if (order === "asc") {
+    if (orderMean === "bad") {
       jun = data.length+1;
       add = -1;
     } else {
@@ -478,11 +492,6 @@ class EnhancedTable extends React.Component {
                   </TableRow>
                 );
               })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
             </TableBody>
           </Table>
         </div>

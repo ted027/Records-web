@@ -160,6 +160,11 @@ for (var j = 0; j < plists.length; j++) {
   });
 }
 
+export const defaultAscListP = [
+  "content0",
+  "content2",
+]
+
 export const crecordData = [];
 for (var ci = 1; ci < crecords.length; ci++) {
   crecordData.push(

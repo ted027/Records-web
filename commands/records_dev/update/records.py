@@ -24,7 +24,8 @@ def records(ctx):
         trs = soup.find_all("tr")
 
         raw_header = [
-            i for i in trs[0].text.replace("\r", "").replace(" ", "").split("\n")
+            i
+            for i in trs[0].text.replace("\r", "").replace(" ", "").split("\n")
             if i != ""
         ]
         header = raw_header
@@ -40,8 +41,8 @@ def records(ctx):
 
         for raw_contents in body:
             contents = [
-                i for i in raw_contents.text.replace("\r", "").replace(" ", "")
-                .split("\n") if i != ""
+                i for i in raw_contents.text.replace("\r", "").replace(
+                    " ", "").replace("%", "").split("\n") if i != ""
             ]
             if contents[0] == header[0]:
                 continue
@@ -62,8 +63,8 @@ def records(ctx):
         strs = ssoup.find_all("tr")
 
         sheader = [
-            i for i in strs[0].text.replace("\r", "").replace(" ", "").split("\n")
-            if i != ""
+            i for i in strs[0].text.replace("\r", "").replace(" ", "").split(
+                "\n") if i != ""
         ]
         if 'HIDARITU' in sabr:
             sheader = sheader[:19]
@@ -73,8 +74,8 @@ def records(ctx):
 
         for raw_scontents in sbody:
             scontents = [
-                i for i in raw_scontents.text.replace("\r", "").replace(" ", "")
-                .split("\n") if i != ""
+                i for i in raw_scontents.text.replace("\r", "").replace(
+                    " ", "").replace("%", "").split("\n") if i != ""
             ]
             if 'HIDARITU' in sabr:
                 scontents = scontents[:19]
@@ -90,9 +91,7 @@ def records(ctx):
 
                 record.extend(scontents)
 
-        records_dict = {
-            'records': records_index
-        }
+        records_dict = {'records': records_index}
 
         league_head = league.replace('top', '')
         json_path = f'./webui/src/{league_head}records.json'
