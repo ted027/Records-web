@@ -251,7 +251,8 @@ class EnhancedTable extends React.Component {
     const orderBy = property;
     var firstOrder;
     var reverseOrder;
-    if (this.state.selected % 2 && defaultAscListP.indexOf(property) >= 0) {
+    if ((this.state.selected % 2 && defaultAscListP.indexOf(property) >= 0) ||
+       (this.state.selected % 2 == 0 && defaultAscListH.indexOf(property) >= 0)) {
       firstOrder = "asc";
       reverseOrder = "desc";
     } else {
