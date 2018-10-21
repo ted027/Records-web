@@ -68,7 +68,9 @@ def records(ctx):
         ]
         if 'HIDARITU' in sabr:
             sheader = sheader[:19]
-        del sheader[:5]
+            del sheader[:6]
+        else:
+            del sheader[:5]
         records_index[0].extend(sheader)
         sbody = strs[1:]
 
@@ -77,10 +79,12 @@ def records(ctx):
                 i for i in raw_scontents.text.replace("\r", "").replace(
                     " ", "").replace("%", "").split("\n") if i != ""
             ]
+            sname = scontents[0]
             if 'HIDARITU' in sabr:
                 scontents = scontents[:19]
-            sname = scontents[0]
-            del scontents[:5]
+                del scontents[:6]
+            else:
+                del scontents[:5]
             if scontents[0] == sheader[0]:
                 continue
 
