@@ -169,17 +169,18 @@ export const defaultAscListP = [
   "content2",
   "content20",
   "content24",
-  "content29", //double
+  "content29",
   "content30",
   "content31",
-  "content32",
-  "content35",
+  "content34",
+  "content36",
   "content37",
   "content38",
   "content39",
-  "content40",
-  "content42",
+  "content41",
 ]
+
+// duplicate QSrate
 
 export const crecordData = [];
 for (var ci = 1; ci < crecords.length; ci++) {

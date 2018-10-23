@@ -6,20 +6,25 @@ import json
 
 @click.command()
 @click.pass_context
-def records(ctx):
-    baseurl = 'http://baseballdata.jp/'
+def yrecords(ctx):
+    baseurl = 'https://baseball.yahoo.co.jp/npb/teams/'
 
+    # team c:1-6 p:7-12
+    # f'{baseurl}{team}/memberlist?type={a,b}
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
-    for (league, sabr) in zip(leaguelist, sabrlist):
+    # may change from 1-12 to 1-6&7-12
+    for i in range(1,13):
 
-        url = baseurl + league
-        surl = baseurl + sabr
+        purl = baseurl + i + '/memberlist?type=a'
+        hurl = baseurl + i + '/memberlist?type=b'
 
-        res = requests.get(url)
+        res = requests.get(purl)
         res.raise_for_status()
         soup = bs4.BeautifulSoup(res.content, "html.parser")
+
+        # under here
 
         trs = soup.find_all("tr")
 
@@ -68,7 +73,7 @@ def records(ctx):
         ]
         if 'HIDARITU' in sabr:
             sheader = sheader[:19]
-            del sheader[:6] # del duplicate(wip)
+            del sheader[:6]
         else:
             del sheader[:5]
         records_index[0].extend(sheader)
@@ -82,7 +87,7 @@ def records(ctx):
             sname = scontents[0]
             if 'HIDARITU' in sabr:
                 scontents = scontents[:19]
-                del scontents[:6] # del duplicate(wip)
+                del scontents[:6]
             else:
                 del scontents[:5]
             if scontents[0] == sheader[0]:
