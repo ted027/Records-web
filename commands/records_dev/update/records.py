@@ -12,6 +12,37 @@ def records(ctx):
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
+    def _cut_hitters_main_metrics(contents, header=False):
+        # cut condition value
+        if header:
+            del contents[2]
+        # cut original metrics
+        del contents[16:20]
+        return contents
+    
+    def _cut_hitters_sabr_metrics(contents):
+        # cut duplicated items
+        del contents[:5]
+        return contents
+
+    def _cut_pitcher_main_metrics(contents, header=False):
+        # cut connected tr
+        contents = contents[:35]
+        # cut team name
+        if not header:
+            contents[1] = contents[1][:1]
+        # cut original metrics
+        del contents[27:31]
+        # cut duplicated metrics
+        del contents[20:22]
+    
+    def _cut_pitcher_sabr_metrics(contents):
+        # cut original metrics
+        contents = contents[:19]
+        # cut duplicated items
+        del contents[:5]
+        return contents
+
     for (league, sabr) in zip(leaguelist, sabrlist):
 
         url = baseurl + league
@@ -30,11 +61,12 @@ def records(ctx):
         ]
         header = raw_header
         if (league == 'ctop' or league == 'ptop'):
-            del header[17:21]
-            del header[2]
+            del header[17:21] # cut original metrics
+            del header[2] # cut condition value
         else:
-            header = header[:35]
-            del header[27:31]
+            header = header[:35] # cut connected tr
+            del header[27:31] # cut original metrics
+            del header[20:22] # cut duplicated matrics
         body = trs[1:]
 
         records_index = [header]
@@ -53,6 +85,7 @@ def records(ctx):
                 contents = contents[:35]
                 contents[1] = contents[1][:1]
                 del contents[27:31]
+                del contents[20:22]
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
@@ -68,9 +101,7 @@ def records(ctx):
         ]
         if 'HIDARITU' in sabr:
             sheader = sheader[:19]
-            del sheader[:6] # del duplicate(wip)
-        else:
-            del sheader[:5]
+        del sheader[:5]
         records_index[0].extend(sheader)
         sbody = strs[1:]
 
@@ -82,9 +113,7 @@ def records(ctx):
             sname = scontents[0]
             if 'HIDARITU' in sabr:
                 scontents = scontents[:19]
-                del scontents[:6] # del duplicate(wip)
-            else:
-                del scontents[:5]
+            del scontents[:5]
             if scontents[0] == sheader[0]:
                 continue
 
