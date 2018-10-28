@@ -18,27 +18,31 @@ def records(ctx):
             del contents[2]
         # cut original metrics
         del contents[16:20]
+        return contents
 
     def _cut_pitcher_main_metrics(contents, head):
         # cut connected tr
         contents = contents[:35]
         # cut team name
         if not head:
-            contents[1] = contents[1][:1]
+            contents[1] = contents[1][0]
         # cut original metrics
         del contents[27:31]
         # cut duplicated metrics
         del contents[20:22]
+        return contents
     
     def _cut_hitters_sabr_metrics(contents):
         # cut duplicated items
         del contents[:5]
-    
+        return contents
+
     def _cut_pitcher_sabr_metrics(contents):
         # cut original metrics
         contents = contents[:19]
         # cut duplicated items
         del contents[:5]
+        return contents
 
     for (league, sabr) in zip(leaguelist, sabrlist):
 
@@ -58,9 +62,9 @@ def records(ctx):
         ]
         header = raw_header
         if (league == 'ctop' or league == 'ptop'):
-            _cut_hitters_main_metrics(header, head=1)
+            header = _cut_hitters_main_metrics(header, head=True)
         else:
-            _cut_pitcher_main_metrics(header, head=1)
+            header = _cut_pitcher_main_metrics(header, head=True)
         body = trs[1:]
 
         records_index = [header]
@@ -74,9 +78,9 @@ def records(ctx):
                 continue
 
             if (league == 'ctop' or league == 'ptop'):
-                _cut_hitters_main_metrics(contents, head=0)
+                contents = _cut_hitters_main_metrics(contents, head=False)
             else:
-                _cut_pitcher_main_metrics(contents, head=0)
+                contents = _cut_pitcher_main_metrics(contents, head=False)
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
@@ -91,9 +95,9 @@ def records(ctx):
                 "\n") if i != ""
         ]
         if 'HIDARITU' in sabr:
-            _cut_pitcher_sabr_metrics(sheader)
+            sheader = _cut_pitcher_sabr_metrics(sheader)
         else :
-            _cut_hitters_sabr_metrics(sheader)
+            sheader = _cut_hitters_sabr_metrics(sheader)
         records_index[0].extend(sheader)
         sbody = strs[1:]
 
@@ -104,9 +108,9 @@ def records(ctx):
             ]
             sname = scontents[0]
             if 'HIDARITU' in sabr:
-                _cut_pitcher_sabr_metrics(scontents)
+                scontents = _cut_pitcher_sabr_metrics(scontents)
             else:
-                _cut_hitters_sabr_metrics(scontents)
+                scontents = _cut_hitters_sabr_metrics(scontents)
             if scontents[0] == sheader[0]:
                 continue
 
