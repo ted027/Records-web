@@ -57,9 +57,6 @@ const CustomTableCellName = withStyles(theme => ({
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
     minWidth: 90,
-    position: "-webkit-sticky",
-    position: "sticky",
-    left: 44,
     zindex: 3
   },
   body: {
@@ -102,6 +99,7 @@ const CustomTableCell = withStyles(theme => ({
 
 const CustomTableSortLabel = withStyles({
   root: {
+    // "&:z-index": 2,
     "&:hover": {
       color: yellow[600]
     },
@@ -452,12 +450,14 @@ class EnhancedTable extends React.Component {
                     <CustomTableCell numeric padding="none">
                       {n.content40}
                     </CustomTableCell>
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content41}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
+                    {selected % 2 === 0 && (
                     <CustomTableCell numeric padding="none">
                       {n.content42}
-                    </CustomTableCell>
+                    </CustomTableCell>)}
                     {selected % 2 === 0 && (
                       <CustomTableCell numeric padding="none">
                         {n.content43}

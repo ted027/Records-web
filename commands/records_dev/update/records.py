@@ -12,12 +12,24 @@ def records(ctx):
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
-    def _cut_hitters_main_metrics(contents, header=False):
+    def _cut_hitters_main_metrics(contents, head):
         # cut condition value
-        if header:
+        if head:
             del contents[2]
         # cut original metrics
         del contents[16:20]
+        return contents
+
+    def _cut_pitcher_main_metrics(contents, head):
+        # cut connected tr
+        contents = contents[:35]
+        # cut team name
+        if not head:
+            contents[1] = contents[1][0]
+        # cut original metrics
+        del contents[27:31]
+        # cut duplicated metrics
+        del contents[22:24]
         return contents
     
     def _cut_hitters_sabr_metrics(contents):
@@ -25,17 +37,6 @@ def records(ctx):
         del contents[:5]
         return contents
 
-    def _cut_pitcher_main_metrics(contents, header=False):
-        # cut connected tr
-        contents = contents[:35]
-        # cut team name
-        if not header:
-            contents[1] = contents[1][:1]
-        # cut original metrics
-        del contents[27:31]
-        # cut duplicated metrics
-        del contents[20:22]
-    
     def _cut_pitcher_sabr_metrics(contents):
         # cut original metrics
         contents = contents[:19]
@@ -61,12 +62,9 @@ def records(ctx):
         ]
         header = raw_header
         if (league == 'ctop' or league == 'ptop'):
-            del header[17:21] # cut original metrics
-            del header[2] # cut condition value
+            header = _cut_hitters_main_metrics(header, head=True)
         else:
-            header = header[:35] # cut connected tr
-            del header[27:31] # cut original metrics
-            del header[20:22] # cut duplicated matrics
+            header = _cut_pitcher_main_metrics(header, head=True)
         body = trs[1:]
 
         records_index = [header]
@@ -80,12 +78,9 @@ def records(ctx):
                 continue
 
             if (league == 'ctop' or league == 'ptop'):
-                del contents[16:20]
+                contents = _cut_hitters_main_metrics(contents, head=False)
             else:
-                contents = contents[:35]
-                contents[1] = contents[1][:1]
-                del contents[27:31]
-                del contents[20:22]
+                contents = _cut_pitcher_main_metrics(contents, head=False)
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
@@ -100,8 +95,9 @@ def records(ctx):
                 "\n") if i != ""
         ]
         if 'HIDARITU' in sabr:
-            sheader = sheader[:19]
-        del sheader[:5]
+            sheader = _cut_pitcher_sabr_metrics(sheader)
+        else :
+            sheader = _cut_hitters_sabr_metrics(sheader)
         records_index[0].extend(sheader)
         sbody = strs[1:]
 
@@ -112,8 +108,9 @@ def records(ctx):
             ]
             sname = scontents[0]
             if 'HIDARITU' in sabr:
-                scontents = scontents[:19]
-            del scontents[:5]
+                scontents = _cut_pitcher_sabr_metrics(scontents)
+            else:
+                scontents = _cut_hitters_sabr_metrics(scontents)
             if scontents[0] == sheader[0]:
                 continue
 
