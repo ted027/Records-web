@@ -29,7 +29,7 @@ def records(ctx):
         # cut original metrics
         del contents[27:31]
         # cut duplicated metrics
-        del contents[20:22]
+        del contents[22:24]
         return contents
     
     def _cut_hitters_sabr_metrics(contents):
