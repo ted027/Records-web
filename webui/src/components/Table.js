@@ -56,8 +56,11 @@ const CustomTableCellName = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    position: "-webkit-sticky",
+    position: "sticky",
     minWidth: 90,
-    zindex: 3
+    left: 44,
+    zindex: 3,
   },
   body: {
     backgroundColor: theme.palette.common.white,
@@ -99,13 +102,13 @@ const CustomTableCell = withStyles(theme => ({
 
 const CustomTableSortLabel = withStyles({
   root: {
-    // "&:z-index": 2,
     "&:hover": {
       color: yellow[600]
     },
     "&:focus": {
       color: yellow[600]
-    }
+    },
+    zindex: 2,
   }
 })(TableSortLabel);
 
