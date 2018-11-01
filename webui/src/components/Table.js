@@ -37,9 +37,6 @@ const CustomTableCellOrder = withStyles(theme => ({
     color: theme.palette.common.white,
     minWidth: 20,
     maxWidth: 20,
-    position: "-webkit-sticky",
-    position: "sticky",
-    left: 0,
     zindex: 3
   },
   body: {
@@ -56,10 +53,7 @@ const CustomTableCellName = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    position: "-webkit-sticky",
-    position: "sticky",
     minWidth: 90,
-    left: 44,
     zindex: 3,
   },
   body: {
