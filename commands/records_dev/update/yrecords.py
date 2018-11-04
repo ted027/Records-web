@@ -61,6 +61,10 @@ def yrecords(ctx):
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
+        res = requests.get(hurl)
+        res.raise_for_status()
+        soup = bs4.BeautifulSoup(res.content, "html.parser")
+
         sres = requests.get(surl)
         sres.raise_for_status()
         ssoup = bs4.BeautifulSoup(sres.content, "html.parser")
