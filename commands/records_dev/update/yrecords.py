@@ -20,9 +20,9 @@ def yrecords(ctx):
         purl = baseurl + i + '/memberlist?type=a'
         hurl = baseurl + i + '/memberlist?type=b'
 
-        res = requests.get(purl)
-        res.raise_for_status()
-        soup = bs4.BeautifulSoup(res.content, "html.parser")
+        pres = requests.get(purl)
+        pres.raise_for_status()
+        soup = bs4.BeautifulSoup(pres.content, "html.parser")
 
         # under here
 
@@ -61,13 +61,9 @@ def yrecords(ctx):
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
-        res = requests.get(hurl)
-        res.raise_for_status()
-        soup = bs4.BeautifulSoup(res.content, "html.parser")
-
-        sres = requests.get(surl)
-        sres.raise_for_status()
-        ssoup = bs4.BeautifulSoup(sres.content, "html.parser")
+        hres = requests.get(hurl)
+        hres.raise_for_status()
+        soup = bs4.BeautifulSoup(hres.content, "html.parser")
 
         strs = ssoup.find_all("tr")
 
