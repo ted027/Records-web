@@ -1,12 +1,7 @@
 # infrastructure
 
 - Lambda
-    - 1.zip
-        - download zip
-        - install commands & records-dev update
-        - npm run build
-        - aws s3 sync
-    - 2. docker image
+    - docker image
         - docker pull
         - same...
 - Role
@@ -16,3 +11,9 @@
 - S3
     - web
     - lambda code
+
+### future
+- nfl score
+- 6 live scores
+- realtime records update
+- change to yrecords

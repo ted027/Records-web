@@ -6,25 +6,52 @@ import json
 
 @click.command()
 @click.pass_context
-def yrecords(ctx):
-    baseurl = 'https://baseball.yahoo.co.jp/npb/teams/'
+def records(ctx):
+    baseurl = 'https://nfljapan.com/'
 
-    # team c:1-6 p:7-12
-    # f'{baseurl}{team}/memberlist?type={a,b}
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
-    # may change from 1-12 to 1-6&7-12
-    for i in range(1,13):
+    def _cut_hitters_main_metrics(contents, head):
+        # cut condition value
+        if head:
+            del contents[2]
+        # cut original metrics
+        del contents[16:20]
+        return contents
 
-        purl = baseurl + i + '/memberlist?type=a'
-        hurl = baseurl + i + '/memberlist?type=b'
+    def _cut_pitcher_main_metrics(contents, head):
+        # cut connected tr
+        contents = contents[:35]
+        # cut team name
+        if not head:
+            contents[1] = contents[1][0]
+        # cut original metrics
+        del contents[27:31]
+        # cut duplicated metrics
+        del contents[22:24]
+        return contents
+    
+    def _cut_hitters_sabr_metrics(contents):
+        # cut duplicated items
+        del contents[:5]
+        return contents
 
-        pres = requests.get(purl)
-        pres.raise_for_status()
-        soup = bs4.BeautifulSoup(pres.content, "html.parser")
+    def _cut_pitcher_sabr_metrics(contents):
+        # cut original metrics
+        contents = contents[:19]
+        # cut duplicated items
+        del contents[:5]
+        return contents
 
-        # under here
+    for (league, sabr) in zip(leaguelist, sabrlist):
+
+        url = baseurl + league
+        surl = baseurl + sabr
+
+        res = requests.get(url)
+        res.raise_for_status()
+        soup = bs4.BeautifulSoup(res.content, "html.parser")
 
         trs = soup.find_all("tr")
 
@@ -35,11 +62,9 @@ def yrecords(ctx):
         ]
         header = raw_header
         if (league == 'ctop' or league == 'ptop'):
-            del header[17:21]
-            del header[2]
+            header = _cut_hitters_main_metrics(header, head=True)
         else:
-            header = header[:35]
-            del header[27:31]
+            header = _cut_pitcher_main_metrics(header, head=True)
         body = trs[1:]
 
         records_index = [header]
@@ -53,17 +78,15 @@ def yrecords(ctx):
                 continue
 
             if (league == 'ctop' or league == 'ptop'):
-                del contents[16:20]
+                contents = _cut_hitters_main_metrics(contents, head=False)
             else:
-                contents = contents[:35]
-                contents[1] = contents[1][:1]
-                del contents[27:31]
+                contents = _cut_pitcher_main_metrics(contents, head=False)
             contents[0] = contents[0].split(':')[1]
             records_index.append(contents)
 
-        hres = requests.get(hurl)
-        hres.raise_for_status()
-        soup = bs4.BeautifulSoup(hres.content, "html.parser")
+        sres = requests.get(surl)
+        sres.raise_for_status()
+        ssoup = bs4.BeautifulSoup(sres.content, "html.parser")
 
         strs = ssoup.find_all("tr")
 
@@ -72,10 +95,9 @@ def yrecords(ctx):
                 "\n") if i != ""
         ]
         if 'HIDARITU' in sabr:
-            sheader = sheader[:19]
-            del sheader[:6]
-        else:
-            del sheader[:5]
+            sheader = _cut_pitcher_sabr_metrics(sheader)
+        else :
+            sheader = _cut_hitters_sabr_metrics(sheader)
         records_index[0].extend(sheader)
         sbody = strs[1:]
 
@@ -86,10 +108,9 @@ def yrecords(ctx):
             ]
             sname = scontents[0]
             if 'HIDARITU' in sabr:
-                scontents = scontents[:19]
-                del scontents[:6]
+                scontents = _cut_pitcher_sabr_metrics(scontents)
             else:
-                del scontents[:5]
+                scontents = _cut_hitters_sabr_metrics(scontents)
             if scontents[0] == sheader[0]:
                 continue
 
