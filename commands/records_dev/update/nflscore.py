@@ -9,40 +9,16 @@ import json
 def records(ctx):
     baseurl = 'https://nfljapan.com/'
 
+    res = requests.get(baseurl)
+    res.raise_for_status()
+    soup = bs4.BeautifulSoup(res.content, "html.parser")
+
+    tables = soup.find_all("table")
+
+
+
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
-
-    def _cut_hitters_main_metrics(contents, head):
-        # cut condition value
-        if head:
-            del contents[2]
-        # cut original metrics
-        del contents[16:20]
-        return contents
-
-    def _cut_pitcher_main_metrics(contents, head):
-        # cut connected tr
-        contents = contents[:35]
-        # cut team name
-        if not head:
-            contents[1] = contents[1][0]
-        # cut original metrics
-        del contents[27:31]
-        # cut duplicated metrics
-        del contents[22:24]
-        return contents
-    
-    def _cut_hitters_sabr_metrics(contents):
-        # cut duplicated items
-        del contents[:5]
-        return contents
-
-    def _cut_pitcher_sabr_metrics(contents):
-        # cut original metrics
-        contents = contents[:19]
-        # cut duplicated items
-        del contents[:5]
-        return contents
 
     for (league, sabr) in zip(leaguelist, sabrlist):
 
