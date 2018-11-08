@@ -9,40 +9,34 @@ import json
 def records(ctx):
     baseurl = 'https://nfljapan.com/'
 
-    leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
-    sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
+    res = requests.get(baseurl)
+    res.raise_for_status()
+    soup = bs4.BeautifulSoup(res.content, "html.parser")
 
-    def _cut_hitters_main_metrics(contents, head):
-        # cut condition value
-        if head:
-            del contents[2]
-        # cut original metrics
-        del contents[16:20]
-        return contents
+    tables = soup.find_all("table")
 
-    def _cut_pitcher_main_metrics(contents, head):
-        # cut connected tr
-        contents = contents[:35]
-        # cut team name
-        if not head:
-            contents[1] = contents[1][0]
-        # cut original metrics
-        del contents[27:31]
-        # cut duplicated metrics
-        del contents[22:24]
-        return contents
-    
-    def _cut_hitters_sabr_metrics(contents):
-        # cut duplicated items
-        del contents[:5]
-        return contents
+    scores_index = []
+    for table in tables:
+        teams_and_status = table.find_all('a')
+        scores = table.find_all('td', class_='score')
+        dict = {}
+        visitor = {}
+        home = {}
+        status = {}
+        visitor['img'] = teams_and_status[0].img.get('src')
+        visitor['link'] = teams_and_status[0].get('href')
+        visitor['score'] = scores[0].text
+        dict[teams_and_status[0].text] = visitor
 
-    def _cut_pitcher_sabr_metrics(contents):
-        # cut original metrics
-        contents = contents[:19]
-        # cut duplicated items
-        del contents[:5]
-        return contents
+        home['img'] = teams_and_status[1].img.get('src')
+        home['link'] = teams_and_status[1].get('href')
+        home['score'] = scores[1].text
+        dict[teams_and_status[2].text] = home
+
+        status['status'] = teams_and_status[1].text
+        status['link'] = teams_and_status[1].get('href')
+        dict['status'] = status
+        scores_index.extend(dict)
 
     for (league, sabr) in zip(leaguelist, sabrlist):
 
