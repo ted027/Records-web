@@ -15,10 +15,28 @@ def records(ctx):
 
     tables = soup.find_all("table")
 
+    scores_index = []
+    for table in tables:
+        teams_and_status = table.find_all('a')
+        scores = table.find_all('td', class_='score')
+        dict = {}
+        visitor = {}
+        home = {}
+        status = {}
+        visitor['img'] = teams_and_status[0].img.get('src')
+        visitor['link'] = teams_and_status[0].get('href')
+        visitor['score'] = scores[0].text
+        dict[teams_and_status[0].text] = visitor
 
+        home['img'] = teams_and_status[1].img.get('src')
+        home['link'] = teams_and_status[1].get('href')
+        home['score'] = scores[1].text
+        dict[teams_and_status[2].text] = home
 
-    leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
-    sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
+        status['status'] = teams_and_status[1].text
+        status['link'] = teams_and_status[1].get('href')
+        dict['status'] = status
+        scores_index.extend(dict)
 
     for (league, sabr) in zip(leaguelist, sabrlist):
 
