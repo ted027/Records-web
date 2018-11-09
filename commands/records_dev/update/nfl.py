@@ -3,10 +3,17 @@ import requests
 import bs4
 import json
 
+def create_team_dict(team_Atag, score_tag, dict):
+    value_dict = {}
+    value_dict['img'] = team_Atag.img.get('src')
+    value_dict['link'] = team_Atag.get('href')
+    value_dict['score'] = score_tag.text
+    dict[team_Atag.text] = value_dict
+    return dict
 
 @click.command()
 @click.pass_context
-def records(ctx):
+def score(ctx):
     baseurl = 'https://nfljapan.com/'
 
     res = requests.get(baseurl)
@@ -20,19 +27,10 @@ def records(ctx):
         teams_and_status = table.find_all('a')
         scores = table.find_all('td', class_='score')
         dict = {}
-        visitor = {}
-        home = {}
+        create_team_dict(teams_and_status[0], scores[0], dict)
+        create_team_dict(teams_and_status[2], scores[1], dict)
+
         status = {}
-        visitor['img'] = teams_and_status[0].img.get('src')
-        visitor['link'] = teams_and_status[0].get('href')
-        visitor['score'] = scores[0].text
-        dict[teams_and_status[0].text] = visitor
-
-        home['img'] = teams_and_status[1].img.get('src')
-        home['link'] = teams_and_status[1].get('href')
-        home['score'] = scores[1].text
-        dict[teams_and_status[2].text] = home
-
         status['status'] = teams_and_status[1].text
         status['link'] = teams_and_status[1].get('href')
         dict['status'] = status
