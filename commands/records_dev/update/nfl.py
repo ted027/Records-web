@@ -36,88 +36,9 @@ def score(ctx):
         dict['status'] = status
         scores_index.extend(dict)
 
-    for (league, sabr) in zip(leaguelist, sabrlist):
+    score_dict = {'scores': scores_index}
 
-        url = baseurl + league
-        surl = baseurl + sabr
+    json_path = f'./webui/src/nfl_score.json'
 
-        res = requests.get(url)
-        res.raise_for_status()
-        soup = bs4.BeautifulSoup(res.content, "html.parser")
-
-        trs = soup.find_all("tr")
-
-        raw_header = [
-            i
-            for i in trs[0].text.replace("\r", "").replace(" ", "").split("\n")
-            if i != ""
-        ]
-        header = raw_header
-        if (league == 'ctop' or league == 'ptop'):
-            header = _cut_hitters_main_metrics(header, head=True)
-        else:
-            header = _cut_pitcher_main_metrics(header, head=True)
-        body = trs[1:]
-
-        records_index = [header]
-
-        for raw_contents in body:
-            contents = [
-                i for i in raw_contents.text.replace("\r", "").replace(
-                    " ", "").replace("%", "").split("\n") if i != ""
-            ]
-            if contents[0] == header[0]:
-                continue
-
-            if (league == 'ctop' or league == 'ptop'):
-                contents = _cut_hitters_main_metrics(contents, head=False)
-            else:
-                contents = _cut_pitcher_main_metrics(contents, head=False)
-            contents[0] = contents[0].split(':')[1]
-            records_index.append(contents)
-
-        sres = requests.get(surl)
-        sres.raise_for_status()
-        ssoup = bs4.BeautifulSoup(sres.content, "html.parser")
-
-        strs = ssoup.find_all("tr")
-
-        sheader = [
-            i for i in strs[0].text.replace("\r", "").replace(" ", "").split(
-                "\n") if i != ""
-        ]
-        if 'HIDARITU' in sabr:
-            sheader = _cut_pitcher_sabr_metrics(sheader)
-        else :
-            sheader = _cut_hitters_sabr_metrics(sheader)
-        records_index[0].extend(sheader)
-        sbody = strs[1:]
-
-        for raw_scontents in sbody:
-            scontents = [
-                i for i in raw_scontents.text.replace("\r", "").replace(
-                    " ", "").replace("%", "").split("\n") if i != ""
-            ]
-            sname = scontents[0]
-            if 'HIDARITU' in sabr:
-                scontents = _cut_pitcher_sabr_metrics(scontents)
-            else:
-                scontents = _cut_hitters_sabr_metrics(scontents)
-            if scontents[0] == sheader[0]:
-                continue
-
-            sname = sname.split(':')[1]
-            for record in records_index:
-                if sname != record[0]:
-                    continue
-
-                record.extend(scontents)
-
-        records_dict = {'records': records_index}
-
-        league_head = league.replace('top', '')
-        json_path = f'./webui/src/{league_head}records.json'
-
-        f = open(json_path, 'w')
-        json.dump(records_dict, f)
-        f.close
+    with open(json_path, 'w') as f:
+        json.dump(score_dict, f)
