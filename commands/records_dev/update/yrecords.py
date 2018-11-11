@@ -11,8 +11,6 @@ def yrecords(ctx):
 
     # team c:1-6 p:7-12
     # f'{baseurl}{team}/memberlist?type={a,b}
-    leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
-    sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
     # may change from 1-12 to 1-6&7-12
     for i in range(1,13):
