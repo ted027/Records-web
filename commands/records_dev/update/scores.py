@@ -89,4 +89,9 @@ def scores(ctx):
         }
         output.append(game_score)
 
-    return json.dumps(output)
+    scores_dict = {'scores': output}
+
+    path = './webui/src/scores.json'
+
+    with open(path, 'w') as f:
+        json.dump(scores_dict, f)
