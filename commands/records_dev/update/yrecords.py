@@ -15,16 +15,20 @@ def yrecords(ctx):
     # may change from 1-12 to 1-6&7-12
     for i in range(1,13):
 
-        purl = baseurl + i + '/memberlist?type=a'
-        hurl = baseurl + i + '/memberlist?type=b'
+        purl = baseurl + str(i) + '/memberlist?type=a'
+        hurl = baseurl + str(i) + '/memberlist?type=b'
 
         pres = requests.get(purl)
         pres.raise_for_status()
         soup = bs4.BeautifulSoup(pres.content, "html.parser")
 
-        # under here
+        table = soup.find("table")
 
-        trs = soup.find_all("tr")
+        raw_head = table.find_all('th')
+        
+        body = table.find_all('tr', class_='cell')
+
+        # under here
 
         raw_header = [
             i
