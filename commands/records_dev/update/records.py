@@ -126,6 +126,5 @@ def records(ctx):
         league_head = league.replace('top', '')
         json_path = f'./webui/src/{league_head}records.json'
 
-        f = open(json_path, 'w')
-        json.dump(records_dict, f)
-        f.close
+        with open(json_path, 'w') as f:
+            json.dump(records_dict, f)
