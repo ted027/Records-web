@@ -2,17 +2,11 @@ AWSTemplateFormatVersion: "2010-09-09"
  
 Description: Record table
 
-Mapping:
-  CapacityMapping:
-    Setting:
-      Read: 1
-      Write: 1
-
 Resources: 
-  RecordTable:
+  ParsonalRecordsTable:
     Type : AWS::DynamoDB::Table
     Properties:
-      TableName: RecordTable
+      TableName: PersonalRecordsTable
       AttributeDefinitions: 
         - AttributeName: HashKey
           AttributeType: S
@@ -20,8 +14,26 @@ Resources:
         - AttributeName: HashKey
           KeyType: HASH
       ProvisionedThroughput: 
-        ReadCapacityUnits: !FindInMap [CapacityMapping, Setting, Read]
-        WriteCapacityUnits: !FindInMap [CapacityMapping, Setting, Write]
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 2
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      Tags:
+        - { Key: version, Value: 1.0 }
+  
+  TeamRecordsTable:
+    Type : AWS::DynamoDB::Table
+    Properties:
+      TableName: TeamRecordsTable
+      AttributeDefinitions: 
+        - AttributeName: HashKey
+          AttributeType: S
+      KeySchema:
+        - AttributeName: HashKey
+          KeyType: HASH
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
       Tags:

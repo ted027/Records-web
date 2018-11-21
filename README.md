@@ -8,12 +8,17 @@
     - lambda role
         - upload s3 bucket
 - Dynamodb
+    - team|name
+    - team
 - S3
     - web
     - lambda code
 
-### future
-- nfl score
-- 6 live scores
-- realtime records update
-- change to yrecords
+# future page
+- live scores
+- orders(table -> team links)
+    - central
+    - pacific
+- personal records(table -> personal links)
+    - central h/p
+    - pacific h/p
