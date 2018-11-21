@@ -1,6 +1,6 @@
 import click
 import os
-from . import deploy, update
+from . import deploy, update, write
 
 abspath = os.path.abspath(__file__)
 while not os.path.exists('.git'):
@@ -14,3 +14,4 @@ def handle(ctx):
 
 handle.add_command(deploy.deploy)
 handle.add_command(update.update)
+handle.add_command(write.write)
