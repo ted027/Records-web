@@ -25,7 +25,11 @@ def yrecords(ctx):
         table = soup.find("table")
 
         raw_head = table.find_all('th')
+        raw_head = raw_head[:int(len(raw_head) / 2)]
+        # unicode
+        head = [hd.text.replace('|', '-').replace('', '') for hd in raw_head]
         
+        # class_='cell' & class_=''
         body = table.find_all('tr', class_='cell')
 
         # under here
