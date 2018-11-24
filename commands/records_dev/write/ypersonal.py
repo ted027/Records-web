@@ -33,3 +33,5 @@ def ypersonal(ctx):
         for ptail in pit_link_tail_list:
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
+            personal_year_link = baseurl + ptail + '/year'
+            personal_year_soup = request_soup(personal_year_link)
