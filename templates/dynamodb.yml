@@ -10,16 +10,30 @@ Resources:
       AttributeDefinitions: 
         - AttributeName: HashKey
           AttributeType: S
+        - AttributeName: RangeKey
+          AttributeType: S
       KeySchema:
         - AttributeName: HashKey
           KeyType: HASH
+        - AttributeName: RangeKey
+          KeyType: RANGE
       ProvisionedThroughput: 
         ReadCapacityUnits: 5
         WriteCapacityUnits: 2
+      GlobalSecondaryIndexes:
+        - IndexName: YearIndex
+          KeySchema:
+            - AttributeName: GSI1HashKey
+              KeyType: HASH
+            - AttributeName: GSI1RangeKey
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 1
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
-      Tags:
-        - { Key: version, Value: 1.0 }
   
   TeamRecordsTable:
     Type : AWS::DynamoDB::Table
@@ -36,5 +50,3 @@ Resources:
         WriteCapacityUnits: 2
       PointInTimeRecoverySpecification:
         PointInTimeRecoveryEnabled: true
-      Tags:
-        - { Key: version, Value: 1.0 }
