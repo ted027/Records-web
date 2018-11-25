@@ -33,5 +33,25 @@ def ypersonal(ctx):
         for ptail in pit_link_tail_list:
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
+            tables = personal_soup.find_all('table')
+            records_table = tables[1]
+            lr_table = tables[6]
+            # 0: profile
+            # 1: **records
+            # 2: *recent records
+            # 3/4: *records by teams central/pacific
+            # 5: monthly records
+            # 6: **left/right
+            # 7: field
+            # 8: open
+
             personal_year_link = baseurl + ptail + '/year'
             personal_year_soup = request_soup(personal_year_link)
+            yearly_tables = personal_year_soup.find_all('table')
+            profile_table = yearly_tables[0]
+
+            yearly_table = yearly_tables[1]
+            header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
+            body = yearly_table.find_all('tr')[1:]
+            # 0: **profile
+            # 1: **yearly records
