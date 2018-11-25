@@ -45,4 +45,7 @@ personal_link = baseurl + link_tail_list[0]
 personal_res = requests.get(personal_link)
 personal_soup = bs4.BeautifulSoup(personal_res.content, "html.parser")
 
+personal_yres = requests.get(personal_link + '/year')
+personal_ysoup = bs4.BeautifulSoup(personal_yres.content, "html.parser")
+
 ```
