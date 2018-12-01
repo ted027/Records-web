@@ -45,13 +45,18 @@ def ypersonal(ctx):
             # 7: field
             # 8: open
 
+            # profile
             personal_year_link = baseurl + ptail + '/year'
             personal_year_soup = request_soup(personal_year_link)
             yearly_tables = personal_year_soup.find_all('table')
             profile_table = yearly_tables[0]
 
+            # yearly records
             yearly_table = yearly_tables[1]
             header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
-            body = yearly_table.find_all('tr')[1:]
-            # 0: **profile
-            # 1: **yearly records
+            body_tr = yearly_table.find_all('tr')[1:]
+            yearly_records = []
+            for year in body_tr:
+                body = [td.text for td in year.find_all('td')]
+                year_dict = dict(zip(header, body))
+                yearly_records.append(year_dict)
