@@ -56,6 +56,8 @@ body_tr = yearly_table.find_all('tr')[1:]
 yearly_records = []
 for year in body_tr:
     body = [td.text for td in year.find_all('td')]
+    if len(body) < len(header):
+        body.insert(1, '')
     year_dict = dict(zip(header, body))
     yearly_records.append(year_dict)
 
