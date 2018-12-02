@@ -47,5 +47,19 @@ personal_soup = bs4.BeautifulSoup(personal_res.content, "html.parser")
 
 personal_yres = requests.get(personal_link + '/year')
 personal_ysoup = bs4.BeautifulSoup(personal_yres.content, "html.parser")
+yearly_tables = personal_ysoup.find_all('table')
+profile_table = yearly_tables[0]
+
+yearly_table = yearly_tables[1]
+header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
+body_tr = yearly_table.find_all('tr')[1:]
+yearly_records = []
+for year in body_tr:
+    body = [td.text for td in year.find_all('td')]
+    if len(body) < len(header):
+        body.insert(1, '')
+    year_dict = dict(zip(header, body))
+    yearly_records.append(year_dict)
+
 
 ```

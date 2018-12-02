@@ -20,6 +20,17 @@ def ypersonal(ctx):
         td_player_list = table.find_all('td', class_='lt yjM')
         return [pl.find('a').get('href') for pl in td_player_list]
 
+    def extend_array(array):
+        new_array = []
+        for elem in array:
+            elem.replace('（','(').replace('）',')')
+            if '(' in elem:
+                elem_split =elem.replace(')', '').split('(')
+                new_array.extend(elem_split)
+            else:
+                new_array.append(elem)
+        return new_array
+
     baseurl = 'https://baseball.yahoo.co.jp/'
 
     for i in range(1,13):
@@ -33,6 +44,9 @@ def ypersonal(ctx):
         for ptail in pit_link_tail_list:
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
+
+            name = personal_soup.find_all('h1')[-1].text.split('（')[0]
+
             tables = personal_soup.find_all('table')
             records_table = tables[1]
             lr_table = tables[6]
@@ -45,13 +59,25 @@ def ypersonal(ctx):
             # 7: field
             # 8: open
 
+            # profile
             personal_year_link = baseurl + ptail + '/year'
             personal_year_soup = request_soup(personal_year_link)
             yearly_tables = personal_year_soup.find_all('table')
             profile_table = yearly_tables[0]
 
+            raw_pheader = [th.text for th in profile_table.find_all('th')]
+            pheader = extend_array(raw_pheader)
+
+            # yearly records
             yearly_table = yearly_tables[1]
-            header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
-            body = yearly_table.find_all('tr')[1:]
-            # 0: **profile
-            # 1: **yearly records
+            
+            yheader = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
+            
+            ybody_tr = yearly_table.find_all('tr')[1:]
+            yearly_records = []
+            for year in ybody_tr:
+                ybody = [td.text for td in year.find_all('td')]
+                if len(ybody) < len(yheader):
+                    ybody.insert(1, '')
+                year_dict = dict(zip(yheader, ybody))
+                yearly_records.append(year_dict)
