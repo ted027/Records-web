@@ -67,6 +67,9 @@ def ypersonal(ctx):
 
             raw_pheader = [th.text for th in profile_table.find_all('th')]
             pheader = extend_array(raw_pheader)
+            raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
+            pbody = extend_array(raw_pbody)
+            profile = dict(zip(pheader, pbody))
 
             # yearly records
             yearly_table = yearly_tables[1]

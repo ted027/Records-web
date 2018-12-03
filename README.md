@@ -50,6 +50,9 @@ personal_ysoup = bs4.BeautifulSoup(personal_yres.content, "html.parser")
 yearly_tables = personal_ysoup.find_all('table')
 profile_table = yearly_tables[0]
 
+raw_pheader = [th.text for th in profile_table.find_all('th')]
+raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
+
 yearly_table = yearly_tables[1]
 header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
 body_tr = yearly_table.find_all('tr')[1:]
