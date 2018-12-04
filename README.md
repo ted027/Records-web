@@ -45,6 +45,12 @@ personal_link = baseurl + link_tail_list[0]
 personal_res = requests.get(personal_link)
 personal_soup = bs4.BeautifulSoup(personal_res.content, "html.parser")
 
+name = personal_soup.find_all('h1')[-1].text.split('（')[0]
+tables = personal_soup.find_all('table')
+records_table = tables[1]
+
+lr_table = tables[6]
+
 personal_yres = requests.get(personal_link + '/year')
 personal_ysoup = bs4.BeautifulSoup(personal_yres.content, "html.parser")
 yearly_tables = personal_ysoup.find_all('table')

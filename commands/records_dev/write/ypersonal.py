@@ -48,8 +48,6 @@ def ypersonal(ctx):
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            records_table = tables[1]
-            lr_table = tables[6]
             # 0: profile
             # 1: **records
             # 2: *recent records
@@ -58,6 +56,17 @@ def ypersonal(ctx):
             # 6: **left/right
             # 7: field
             # 8: open
+
+            records_table = tables[1]
+            rheader = [th.text for th in records_table.find_all('th')[1:]]
+            rbody = [td.text for td in records_table.find_all('td')]
+            records = dict(zip(rheader, rbody))
+            # write dict records
+
+            lr_table = tables[6]
+            # lheader = [th.text for th in lr_table.find_all('th')]
+            # lbody = [td.text for td in lr_table.find_all('td')]
+            # lr_records = dict(zip(lheader, lbody))
 
             # profile
             personal_year_link = baseurl + ptail + '/year'
@@ -70,6 +79,7 @@ def ypersonal(ctx):
             raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
             pbody = extend_array(raw_pbody)
             profile = dict(zip(pheader, pbody))
+            # write dict profile
 
             # yearly records
             yearly_table = yearly_tables[1]
@@ -84,3 +94,4 @@ def ypersonal(ctx):
                     ybody.insert(1, '')
                 year_dict = dict(zip(yheader, ybody))
                 yearly_records.append(year_dict)
+            # write dict yearly_records
