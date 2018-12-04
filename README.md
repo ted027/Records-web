@@ -48,6 +48,9 @@ personal_soup = bs4.BeautifulSoup(personal_res.content, "html.parser")
 name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 tables = personal_soup.find_all('table')
 records_table = tables[1]
+rheader = [th.text for th in records_table.find_all('th')[1:]]
+rbody = [td.text for td in records_table.find_all('td')]
+records = dict(zip(rheader, rbody))
 
 lr_table = tables[6]
 

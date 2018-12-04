@@ -61,13 +61,28 @@ def ypersonal(ctx):
             rheader = [th.text for th in records_table.find_all('th')[1:]]
             rbody = [td.text for td in records_table.find_all('td')]
             records = dict(zip(rheader, rbody))
-            # write dict records
 
             lr_table = tables[6]
-            # lheader = [th.text for th in lr_table.find_all('th')]
-            # lbody = [td.text for td in lr_table.find_all('td')]
-            # lr_records = dict(zip(lheader, lbody))
+            lr_header = [th.text for th in lr_table.find_all('th')]
+            l_header = ['対左' + h for h in lr_header]
+            r_header = ['対右' + h for h in lr_header]
+            
+            lr_tr = lr_table.find_all('tr')
+            lr_body1 = [td.text for td in lr_tr[-2].find_all('td')]
+            if not '左' in lr_body1[0]:
+                print('left records error')
+                raise
+            l_records = dict(zip(l_header, lr_body1[1:]))
+            lr_body2 = [td.text for td in lr_tr[-1].find_all('td')]
+            if not '右' in lr_body2[0]:
+                print('right records error')
+                raise
+            r_records = dict(zip(r_header, lr_body2[1:]))
 
+            records.update(l_records)
+            records.update(r_records)
+            # write dict records
+            
             # profile
             personal_year_link = baseurl + ptail + '/year'
             personal_year_soup = request_soup(personal_year_link)
