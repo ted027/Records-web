@@ -34,7 +34,7 @@ baseurl = 'https://baseball.yahoo.co.jp/'
 i=1
 purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=a'
 hurl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=b'
-res = requests.get(purl)
+res = requests.get(hurl)
 soup = bs4.BeautifulSoup(res.content, "html.parser")
 
 table = soup.find("table")
@@ -60,7 +60,7 @@ yearly_tables = personal_ysoup.find_all('table')
 profile_table = yearly_tables[0]
 
 raw_pheader = [th.text for th in profile_table.find_all('th')]
-raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
+raw_pbody = [td.text for td in profile_table.find_all('td')[1:9]]
 
 yearly_table = yearly_tables[1]
 header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]

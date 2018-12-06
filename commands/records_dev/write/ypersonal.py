@@ -3,12 +3,12 @@ import requests
 import bs4
 import json
 import boto3
+import re
 
 
 @click.command()
 @click.pass_context
 def ypersonal(ctx):
-
     def request_soup(url):
         res = requests.get(url)
         res.raise_for_status()
@@ -23,12 +23,9 @@ def ypersonal(ctx):
     def extend_array(array):
         new_array = []
         for elem in array:
-            elem.replace('（','(').replace('）',')')
-            if '(' in elem:
-                elem_split =elem.replace(')', '').split('(')
-                new_array.extend(elem_split)
-            else:
-                new_array.append(elem)
+            elem.replace('（','(').replace('）',')').replace(')', '').replace('／', '/')
+            elem = re.split('[(/]', elem)
+            new_array.extend(elem)
         return new_array
 
     def profile_dict(profile_table):
@@ -115,8 +112,7 @@ def ypersonal(ctx):
             records.update(lr_records)
             # write dict records
 
-
-            personal_year_link = baseurl + ptail + '/year'
+            personal_year_link = personal_link + '/year'
             personal_year_soup = request_soup(personal_year_link)
             yearly_table = personal_year_soup.find_all('table')[1]
             
@@ -132,11 +128,24 @@ def ypersonal(ctx):
 
             tables = personal_soup.find_all('table')
             profile_table = tables[0]
+            if len(tables < 3):
+                pass
+                # not write
             # need to confirm
+            # 0: profile
+            # 1: **records
+            # -1: open
+
+
             # records_table = tables[1]
             # lr_table = tables[6]
 
             profile = profile_dict(profile_table)
             # write dict profile
 
+            personal_year_link = personal_link + '/year'
+            personal_year_soup = request_soup(personal_year_link)
+            yearly_table = personal_year_soup.find_all('table')[1]
             
+            yearly_records = yearly_records(yearly_table)
+            # write array of dicts yearly_records
