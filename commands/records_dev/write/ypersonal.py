@@ -37,7 +37,7 @@ def ypersonal(ctx):
         return = dict(zip(pheader, pbody))
 
     def yearly_records(yearly_table):
-        header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
+        yheader = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
         
         ybody_tr = yearly_table.find_all('tr')[1:]
         yearly_records = []
