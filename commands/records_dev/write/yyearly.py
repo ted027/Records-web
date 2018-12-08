@@ -8,7 +8,7 @@ import re
 
 @click.command()
 @click.pass_context
-def ypersonal(ctx):
+def yyearly(ctx):
     def request_soup(url):
         res = requests.get(url)
         res.raise_for_status()
