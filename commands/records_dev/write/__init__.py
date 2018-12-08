@@ -1,11 +1,13 @@
 import click
-from . import ypersonal, spersonal, yteam
+from . import yrecords, spersonal, yteam, yprofile, yyearly
 
 @click.group()
 @click.pass_context
 def write(ctx):
     pass
 
-write.add_command(ypersonal.ypersonal)
+write.add_command(yrecords.yrecords)
+write.add_command(yprofile.yprofile)
+write.add_command(yyearly.yyearly)
 write.add_command(spersonal.spersonal)
 write.add_command(yteam.yteam)

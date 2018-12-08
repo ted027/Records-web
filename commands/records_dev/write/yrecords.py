@@ -3,12 +3,12 @@ import requests
 import bs4
 import json
 import boto3
+import re
 
 
 @click.command()
 @click.pass_context
-def ypersonal(ctx):
-
+def yrecords(ctx):
     def request_soup(url):
         res = requests.get(url)
         res.raise_for_status()
@@ -23,35 +23,10 @@ def ypersonal(ctx):
     def extend_array(array):
         new_array = []
         for elem in array:
-            elem.replace('（','(').replace('）',')')
-            if '(' in elem:
-                elem_split =elem.replace(')', '').split('(')
-                new_array.extend(elem_split)
-            else:
-                new_array.append(elem)
+            elem.replace('（','(').replace('）',')').replace(')', '').replace('／', '/')
+            elem = re.split('[(/]', elem)
+            new_array.extend(elem)
         return new_array
-
-    def profile_dict(profile_table):
-        raw_pheader = [th.text for th in profile_table.find_all('th')]
-        # divide insede () contents
-        pheader = extend_array(raw_pheader)
-        raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
-        pbody = extend_array(raw_pbody)
-        return = dict(zip(pheader, pbody))
-
-    def yearly_records(yearly_table):
-        header = [th.text.replace('|', 'ー') for th in yearly_table.find_all('th')]
-        
-        ybody_tr = yearly_table.find_all('tr')[1:]
-        yearly_records = []
-        for year in ybody_tr:
-            ybody = [td.text for td in year.find_all('td')]
-            # last content have no 'team' value
-            if len(ybody) < len(yheader):
-                ybody.insert(1, '')
-            year_dict = dict(zip(yheader, ybody))
-            yearly_records.append(year_dict)
-        return yearly_records
 
     def pitch_records(records_table):
         # [1:] remove '投手成績'
@@ -94,7 +69,8 @@ def ypersonal(ctx):
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            profile_table = tables[0]
+            if len(tables < 3):
+                continue
             records_table = tables[1]
             lr_table = tables[6]
             # 0: profile
@@ -106,22 +82,11 @@ def ypersonal(ctx):
             # 7: field
             # 8: open
 
-            profile = profile_dict(profile_table)
-            # write dict profile
-
             records = pitch_records(records_table)
 
             lr_records = lr_pitch_records(lr_table)
             records.update(lr_records)
             # write dict records
-
-
-            personal_year_link = baseurl + ptail + '/year'
-            personal_year_soup = request_soup(personal_year_link)
-            yearly_table = personal_year_soup.find_all('table')[1]
-            
-            yearly_records = yearly_records(yearly_table)
-            # write array of dicts yearly_records
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
@@ -132,11 +97,12 @@ def ypersonal(ctx):
 
             tables = personal_soup.find_all('table')
             profile_table = tables[0]
+            if len(tables < 3):
+                continue
             # need to confirm
+            # 0: profile
+            # 1: **records
+            # -1: open
+
             # records_table = tables[1]
             # lr_table = tables[6]
-
-            profile = profile_dict(profile_table)
-            # write dict profile
-
-            
