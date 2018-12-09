@@ -69,7 +69,7 @@ def yrecords(ctx):
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            if len(tables < 3):
+            if len(tables < 7):
                 continue
             records_table = tables[1]
             lr_table = tables[6]
@@ -96,8 +96,8 @@ def yrecords(ctx):
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            profile_table = tables[0]
-            if len(tables < 3):
+            # need to confirm: 7
+            if len(tables < 7):
                 continue
             # need to confirm
             # 0: profile

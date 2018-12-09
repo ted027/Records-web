@@ -56,7 +56,7 @@ def yyearly(ctx):
             personal_year_link = personal_link + '/year'
             personal_year_soup = request_soup(personal_year_link)
             yearly_table = personal_year_soup.find_all('table')
-            if len(yearly_records) < 2:
+            if len(yearly_table) < 2:
                 continue
             
             yearly_records = yearly_records(yearly_table[1])
@@ -72,7 +72,7 @@ def yyearly(ctx):
             personal_year_link = personal_link + '/year'
             personal_year_soup = request_soup(personal_year_link)
             yearly_table = personal_year_soup.find_all('table')
-            if len(yearly_records) < 2:
+            if len(yearly_table) < 2:
                 continue
 
             yearly_records = yearly_records(yearly_table[1])
