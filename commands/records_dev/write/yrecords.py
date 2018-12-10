@@ -3,7 +3,6 @@ import requests
 import bs4
 import json
 import boto3
-import re
 
 
 @click.command()
@@ -20,36 +19,48 @@ def yrecords(ctx):
         td_player_list = table.find_all('td', class_='lt yjM')
         return [pl.find('a').get('href') for pl in td_player_list]
 
-    def extend_array(array):
-        new_array = []
-        for elem in array:
-            elem.replace('（','(').replace('）',')').replace(')', '').replace('／', '/')
-            elem = re.split('[(/]', elem)
-            new_array.extend(elem)
-        return new_array
-
-    def pitch_records(records_table):
-        # [1:] remove '投手成績'
+    def dict_records(records_table):
+        # [1:] remove '__成績'
         rheader = [th.text for th in records_table.find_all('th')[1:]]
         rbody = [td.text for td in records_table.find_all('td')]
         return dict(zip(rheader, rbody))
 
-    def lr_pitch_records(lr_table):
-        lr_header = [th.text for th in lr_table.find_all('th')]
-        r_header = ['対右' + h for h in lr_header]
-        l_header = ['対左' + h for h in lr_header]
-        
-        lr_tr = lr_table.find_all('tr')
-        lr_body1 = [td.text for td in lr_tr[-2].find_all('td')]
-        if not '右' in lr_body1[0]:
-            click.ClickException('cannot find the word that means right records')
-        lr_records = dict(zip(r_header, lr_body1[1:]))
+    def chance_records(chance_table):
+        chheader_raw = [th.text for th in chance_table.find_all('th')]
+        chheader = [chheader_raw[0][:4] + h for h in chheader_raw[1:]]
 
-        lr_body2 = [td.text for td in lr_tr[-1].find_all('td')]
-        if not '左' in lr_body2[0]:
+        chbody = [td.text for td in chance_table.find_all('td')]
+        return dict(zip(chheader, chbody))
+
+    def records_by_rl(rl_table,dump_val):
+        rl_header = [th.text for th in rl_table.find_all('th')]
+        r_header = ['対右' + h for h in rl_header]
+        l_header = ['対左' + h for h in rl_header]
+        
+        rl_tr = rl_table.find_all('tr')
+        rl_body1 = [td.text for td in rl_tr[-2].find_all('td')]
+        if not '右' in rl_body1[0]:
+            click.ClickException('cannot find the word that means right records')
+        rl_records = dict(zip(r_header, rl_body1[dump_val:]))
+
+        rl_body2 = [td.text for td in rl_tr[-1].find_all('td')]
+        if not '左' in rl_body2[0]:
             click.ClickException('cannot find the word that means lenft records')
-        lr_records.update(dict(zip(l_header, lr_body2[1:])))
-        return lr_records
+        rl_records.update(dict(zip(l_header, rl_body2[dump_val:])))
+        return rl_records
+
+    def records_by_count_or_runner(table_by):
+        # cut count or runner
+        header = [th.text for th in table_by.find_all('th')][1:]
+        
+        # 2: cut title and header
+        body_tr = table_by.find_all('tr')[2:]
+        records_by_count_or_runner = {}
+        for tr in body_tr:
+            body = [td.text for td in tr.find_all('td')]
+            records_by_count_or_runner[body[0]] = dict(zip(header, body[1:]))
+        return records_by_count_or_runner
+
 
     baseurl = 'https://baseball.yahoo.co.jp/'
 
@@ -69,10 +80,10 @@ def yrecords(ctx):
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            if len(tables < 7):
+            if len(tables) < 7:
                 continue
             records_table = tables[1]
-            lr_table = tables[6]
+            rl_table = tables[6]
             # 0: profile
             # 1: **records
             # 2: *recent records
@@ -80,12 +91,13 @@ def yrecords(ctx):
             # 5: monthly records
             # 6: **left/right
             # 7: field
-            # 8: open
+            # -1: open
 
-            records = pitch_records(records_table)
+            records = dict_records(records_table)
 
-            lr_records = lr_pitch_records(lr_table)
-            records.update(lr_records)
+            # 1: dump '○打'
+            records_by_rl = records_by_rl(rl_table, 1)
+            records.update(records_by_rl)
             # write dict records
 
         for htail in hit_link_tail_list:
@@ -97,12 +109,37 @@ def yrecords(ctx):
 
             tables = personal_soup.find_all('table')
             # need to confirm: 7
-            if len(tables < 7):
+            if len(tables) < 10:
                 continue
-            # need to confirm
+            records_table = tables[1]
+            chance_table = tables[2]
+            rl_table = tables[7]
+            count_table = tables[8]
+            runner_table = tables[9]
             # 0: profile
             # 1: **records
+            # 2: **chance
+            # 3: *recent records
+            # 4/5: *records by teams central/pacific
+            # 6: monthly records
+            # 7: **left/right
+            # 8: **count
+            # 9: **runner
+            # 10: field
             # -1: open
 
-            # records_table = tables[1]
-            # lr_table = tables[6]
+            records = dict_records(records_table)
+
+            chance_records = chance_records(chance_table)
+            records.update(chance_records)
+
+            # 2: dump '○投' | '○打席'
+            records_by_rl = records_by_rl(rl_table, 2)
+            records.update(records_by_rl)
+
+            records_by_count = records_by_count_or_runner(count_table)
+            records.update(records_by_count)
+
+            records_by_runner = records_by_count_or_runner(runner_table)
+            records.update(records_by_runner)
+            # write dict records

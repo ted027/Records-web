@@ -34,7 +34,7 @@ def yprofile(ctx):
         pheader = extend_array(raw_pheader)
         raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
         pbody = extend_array(raw_pbody)
-        return = dict(zip(pheader, pbody))
+        return dict(zip(pheader, pbody))
 
     baseurl = 'https://baseball.yahoo.co.jp/'
 

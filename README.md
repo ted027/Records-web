@@ -40,7 +40,7 @@ soup = bs4.BeautifulSoup(res.content, "html.parser")
 table = soup.find("table")
 td_player_list = table.find_all('td', class_='lt yjM')
 link_tail_list = [pl.find('a').get('href') for pl in td_player_list]
-personal_link = baseurl + link_tail_list[0]
+personal_link = baseurl + link_tail_list[1]
 
 personal_res = requests.get(personal_link)
 personal_soup = bs4.BeautifulSoup(personal_res.content, "html.parser")

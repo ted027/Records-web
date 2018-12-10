@@ -3,7 +3,6 @@ import requests
 import bs4
 import json
 import boto3
-import re
 
 
 @click.command()
@@ -27,9 +26,9 @@ def yyearly(ctx):
         yearly_records = []
         for year in ybody_tr:
             ybody = [td.text for td in year.find_all('td')]
-            # last content have no 'team' value
             if ybody[0] == '2018':
                 continue
+            # last content have no 'team' value
             if len(ybody) < len(yheader):
                 ybody.insert(1, '')
             year_dict = dict(zip(yheader, ybody))
