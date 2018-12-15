@@ -1,5 +1,5 @@
 import click
-from . import yrecords, spersonal, yteam, yprofile, yyearly
+from . import yrecords, yteam, yprofile, yyearly
 
 @click.group()
 @click.pass_context

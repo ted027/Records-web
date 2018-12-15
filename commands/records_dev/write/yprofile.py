@@ -34,7 +34,7 @@ def yprofile(ctx):
         pheader = extend_array(raw_pheader)
         raw_pbody = [td.text for td in profile_table.find_all('td')[1:8]]
         pbody = extend_array(raw_pbody)
-        return = dict(zip(pheader, pbody))
+        return dict(zip(pheader, pbody))
 
     baseurl = 'https://baseball.yahoo.co.jp/'
 
@@ -55,14 +55,6 @@ def yprofile(ctx):
 
             tables = personal_soup.find_all('table')
             profile_table = tables[0]
-            # 0: profile
-            # 1: **records
-            # 2: *recent records
-            # 3/4: *records by teams central/pacific
-            # 5: monthly records
-            # 6: **left/right
-            # 7: field
-            # 8: open
 
             profile = profile_dict(profile_table)
             # write dict profile
@@ -71,7 +63,6 @@ def yprofile(ctx):
             personal_link = baseurl + htail
             personal_soup = request_soup(personal_link)
 
-            # need to confirm
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
