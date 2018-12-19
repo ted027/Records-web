@@ -28,7 +28,6 @@ def yprofile(ctx):
             new_array.extend(elem)
         return new_array
 
-    # change to {key: {'S': value}}
     def profile_dict(profile_table):
         raw_pheader = [th.text for th in profile_table.find_all('th')]
         # divide insede () contents
