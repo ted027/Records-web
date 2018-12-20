@@ -3,6 +3,7 @@ import requests
 import bs4
 import json
 import boto3
+from records_dev.aws.dynamodb import dynamodb
 
 
 @click.command()
@@ -98,17 +99,17 @@ def yrecords(ctx):
             # 1: dump '○打'
             records_by_rl = records_by_rl(rl_table, 1)
             records.update(records_by_rl)
-            # write dict records
+            # wip: get year '2018'
+            records_item = dynamodb.concat_item(name, '2018', records)
+            dynamodb.put('PersonalRecordsTable', records_item)
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
             personal_soup = request_soup(personal_link)
 
-            # need to confirm
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
-            # need to confirm: 7
             if len(tables) < 10:
                 continue
             records_table = tables[1]
@@ -142,4 +143,6 @@ def yrecords(ctx):
 
             records_by_runner = records_by_count_or_runner(runner_table)
             records.update(records_by_runner)
-            # write dict records
+            # wip: get year '2018'
+            records_item = dynamodb.concat_item(name, '2018', records)
+            dynamodb.put('PersonalRecordsTable', records_item)
