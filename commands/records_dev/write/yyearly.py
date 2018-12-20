@@ -3,6 +3,7 @@ import requests
 import bs4
 import json
 import boto3
+from records_dev.aws.dynamodb import dynamodb
 
 
 @click.command()
@@ -49,7 +50,6 @@ def yyearly(ctx):
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
 
-            # personal name
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             personal_year_link = personal_link + '/year'
@@ -65,7 +65,6 @@ def yyearly(ctx):
             personal_link = baseurl + htail
             personal_soup = request_soup(personal_link)
 
-            # need to confirm
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             personal_year_link = personal_link + '/year'

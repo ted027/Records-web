@@ -4,6 +4,8 @@ import bs4
 import json
 import boto3
 import re
+from records_dev.aws.dynamodb import dynamodb
+
 
 
 @click.command()
@@ -50,14 +52,14 @@ def yprofile(ctx):
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
 
-            # personal name
             name = personal_soup.find_all('h1')[-1].text.split('（')[0]
 
             tables = personal_soup.find_all('table')
             profile_table = tables[0]
 
             profile = profile_dict(profile_table)
-            # write dict profile
+            profile_item = dynamodb.concat_item(name, '0', profile)
+            dynamodb.put('PersonalRecordsTable', profile_item)
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
@@ -69,4 +71,5 @@ def yprofile(ctx):
             profile_table = tables[0]
 
             profile = profile_dict(profile_table)
-            # write dict profile
+            profile_item = dynamodb.concat_item(name, '0', profile)
+            dynamodb.put('PersonalRecordsTable', profile_item)
