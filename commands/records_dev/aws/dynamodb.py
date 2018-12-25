@@ -12,10 +12,12 @@ class dynamodb:
         }
         return dic.update(item_dict)
 
-    def put(self, table_name, item):
+    def put(self, item):
         self.table.put_item(
             Item=item
         )
 
     def batch_write_item(self, items):
-        self.table.batch_write_item()
+        with self.table.batch_writer() as batch:
+            for item in items:
+                batch.put_item(Item =)
