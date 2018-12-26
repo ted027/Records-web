@@ -1,18 +1,23 @@
 import boto3
 
 class dynamodb:
-    def __init__(self):
-        dynamo = boto3.client('dynamodb')
+    def __init__(self, table_name):
+        dynamodb = boto3.resource('dynamodb')
+        self.table = dynamodb.Table(table_name)
 
-    def concat_item(HASH_KEY, RANGE_KEY, item_dict):
+    def concat_item(self, HASH_KEY, RANGE_KEY, item_dict):
         dic =  {
             'HASH_KEY': HASH_KEY,
             'RANGE_KEY': RANGE_KEY,
         }
         return dic.update(item_dict)
 
-    def put(table_name, item):
-        response = client.put_item(
-            TableName=table_name,
+    def put(self, item):
+        self.table.put_item(
             Item=item
-        }
+        )
+
+    def batch_write_item(self, items):
+        with self.table.batch_writer() as batch:
+            for item in items:
+                batch.put_item(Item =)
