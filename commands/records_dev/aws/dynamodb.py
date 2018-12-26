@@ -17,7 +17,9 @@ class dynamodb:
             Item=item
         )
 
-    def batch_write_item(self, items):
+    def batch_write_item(self, HASH_KEY, items):
         with self.table.batch_writer() as batch:
             for item in items:
-                batch.put_item(Item =)
+                # not array but dict
+                item_dict = self.concat_item(HASH_KEY, item[0], item[1:])
+                batch.put_item(Item =item_dict)
