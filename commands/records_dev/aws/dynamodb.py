@@ -20,6 +20,6 @@ class dynamodb:
     def batch_write_item(self, HASH_KEY, items):
         with self.table.batch_writer() as batch:
             for item in items:
-                # not array but dict
-                item_dict = self.concat_item(HASH_KEY, item[0], item[1:])
+                RANGE_KEY = item.pop('年度')
+                item_dict = self.concat_item(HASH_KEY, RANGE_KEY, item)
                 batch.put_item(Item =item_dict)
