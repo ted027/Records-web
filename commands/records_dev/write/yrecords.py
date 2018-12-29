@@ -67,8 +67,6 @@ def yrecords(ctx):
 
     for i in range(1,13):
 
-        dynamo = dynamodb('PersonalRecordsTable')
-
         purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=a'
         hurl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=b'
 
@@ -101,9 +99,10 @@ def yrecords(ctx):
             # 1: dump '○打'
             records_by_rl = records_by_rl(rl_table, 1)
             records.update(records_by_rl)
+            pitch_dynamo = dynamodb('PitchRecordsTable')
             # wip: get year '2018'
-            records_item = dynamo.concat_item(name, '2018', records)
-            dynamo.put(records_item)
+            records_item = pitch_dynamo.concat_item(name, '2018', records)
+            pitch_dynamo.put(records_item)
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
@@ -145,6 +144,7 @@ def yrecords(ctx):
 
             records_by_runner = records_by_count_or_runner(runner_table)
             records.update(records_by_runner)
+            hit_dynamo = dynamodb('HitRecordsTable')
             # wip: get year '2018'
-            records_item = dynamo.concat_item(name, '2018', records)
-            dynamo.put(records_item)
+            records_item = hit_dynamo.concat_item(name, '2018', records)
+            hit_dynamo.put(records_item)

@@ -23,6 +23,13 @@
     - central h/p
     - pacific h/p
 
+# lambda
+- PUT
+  - personal records
+- GET
+  - everyone's records
+  - personal records
+
 # py env
 ```
 import click
