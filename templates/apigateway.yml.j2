@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: "2010-09-09"
+ 
+Description: Daily update database
+ 
+Resources:
+  estApiGateway:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Body: {{swagger_body}}
+      Name: RestApiGateway

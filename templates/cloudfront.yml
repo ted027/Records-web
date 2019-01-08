@@ -1,0 +1,7 @@
+AWSTemplateFormatVersion: "2010-09-09" 
+Description: Records0web cloudfront
+
+Resources:
+  CloudFrontCdnDist:
+    Type: AWS::CloudFront::Distribution
+    Properties:
