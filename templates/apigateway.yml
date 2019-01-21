@@ -6,5 +6,9 @@ Resources:
   estApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Body: {{swagger_body}}
+      Body:
+        Fn::Transform:
+          Name: 'AWS::Include'
+          Parameters:
+            Location: 'docs/swagger.yaml'
       Name: RestApiGateway
