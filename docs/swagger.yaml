@@ -1,0 +1,18 @@
+swagger: "2.0"
+basePath: "/"
+schemes:
+  - "https"
+produces: ['application/json']
+consumes: ['application/json']
+x-amazon-apigateway-gateway-responses:
+  MISSING_AUTHENTICATION_TOKEN:
+    statusCode: 404
+    responseTemplates:
+      application/json: |
+        {"message":"Not Found"}
+  THROTTLED:
+    statusCode: 503
+    responseTemplates:
+      application/json: |
+        {"message":"Too many requests"}
+paths:

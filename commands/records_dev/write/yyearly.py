@@ -39,9 +39,6 @@ def yyearly(ctx):
     baseurl = 'https://baseball.yahoo.co.jp/'
 
     for i in range(1,13):
-
-        dynamo = dynamodb('PersonalRecordsTable')
-
         purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=a'
         hurl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=b'
 
@@ -61,7 +58,8 @@ def yyearly(ctx):
                 continue
             
             yearly_records = yearly_records(yearly_table[1])
-            dynamo.batch_write_item(name, yearly_records)
+            pitch_dynamo = dynamodb('PitchRecordsTable')
+            pitch_dynamo.batch_write_item(name, yearly_records)
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
@@ -76,4 +74,5 @@ def yyearly(ctx):
                 continue
 
             yearly_records = yearly_records(yearly_table[1])
-            dynamo.batch_write_item(name, yearly_records)
+            hit_dynamo = dynamodb('HitRecordsTable')
+            hit_dynamo.batch_write_item(name, yearly_records)

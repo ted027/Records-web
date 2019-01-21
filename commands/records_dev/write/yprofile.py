@@ -41,9 +41,6 @@ def yprofile(ctx):
     baseurl = 'https://baseball.yahoo.co.jp/'
 
     for i in range(1,13):
-
-        dynamo = dynamodb('PersonalRecordsTable')
-
         purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=a'
         hurl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=b'
 
@@ -60,8 +57,9 @@ def yprofile(ctx):
             profile_table = tables[0]
 
             profile = profile_dict(profile_table)
-            profile_item = dynamo.concat_item(name, 'profile', profile)
-            dynamo.put(profile_item)
+            pitch_dynamo = dynamodb('PitchRecordsTable')
+            profile_item = pitch_dynamo.concat_item(name, 'profile', profile)
+            pitch_dynamo.put(profile_item)
 
         for htail in hit_link_tail_list:
             personal_link = baseurl + htail
@@ -73,5 +71,6 @@ def yprofile(ctx):
             profile_table = tables[0]
 
             profile = profile_dict(profile_table)
-            profile_item = dynamo.concat_item(name, 'profile', profile)
-            dynamo.put(profile_item)
+            hit_dynamo = dynamodb('HitRecordsTable')
+            profile_item = hit_dynamo.concat_item(name, 'profile', profile)
+            hit_dynamo.put(profile_item)
