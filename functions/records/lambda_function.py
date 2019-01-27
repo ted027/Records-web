@@ -17,4 +17,6 @@ logger.addHandler(handler)
 logger.propagate = False
 
 def lambda_handler(event, context):
-    pass
+    logger.debug('router start')
+    # router
+    logger.debug('router end')

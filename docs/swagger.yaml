@@ -16,3 +16,8 @@ x-amazon-apigateway-gateway-responses:
       application/json: |
         {"message":"Too many requests"}
 paths:
+
+
+# GET/PUT one's year records
+# GET/PUT year all records (def)
+# GET one's all records
