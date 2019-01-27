@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description: Daily update database
  
 Resources:
-  estApiGateway:
+  RestApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
       Body:
@@ -12,3 +12,9 @@ Resources:
           Parameters:
             Location: 'docs/swagger.yaml'
       Name: RestApiGateway
+
+Outputs:
+  RestApiGatewayId:
+    Value: !Ref RestApiGateway
+    Export:
+      Name: !Sub ${AWS::StackName}-RestApiGatewayId

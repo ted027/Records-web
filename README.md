@@ -27,7 +27,7 @@
 - PUT
   - personal records
 - GET
-  - everyone's records
+  - all year records
   - personal records
 
 # py env
