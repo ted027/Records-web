@@ -16,7 +16,7 @@ x-amazon-apigateway-gateway-responses:
       application/json: |
         {"message":"Too many requests"}
 paths:
-  /api/records/v1/personal/{personalId}/{year}:
+  /api/records/v1/personal/{personalId}:
     parameters:
       - tbd
   
@@ -24,11 +24,18 @@ paths:
       summary: get personal record
       description: get personal record
       parameters: 
+        - name: year
+          in: query
+          type: string
+          maxLength: 256
       responses:
-
+        200: 
+        400: 
+        404: 
+        500: 
 
 # GET/PUT one's year records
-## /api/records/v1/personal/{personalId}/{year}
+## /api/records/v1/personal/{personalId}
 # GET/PUT year all records (def)
 ## /api/records/v1/pitchers/{year}
 ## /api/records/v1/hitters/{year}
