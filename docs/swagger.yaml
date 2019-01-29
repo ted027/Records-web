@@ -24,6 +24,7 @@ paths:
       summary: get personal record
       description: get personal record
       parameters: 
+      responses:
 
 
 # GET/PUT one's year records
