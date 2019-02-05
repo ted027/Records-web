@@ -16,36 +16,54 @@ x-amazon-apigateway-gateway-responses:
       application/json: |
         {"message":"Too many requests"}
 paths:
-  /api/records/v1/personal/{personalId}:
+  /api/records/v1/hitter/{personalId}:
     parameters:
       - tbd
   
     get:
-      summary: get personal record
-      description: get personal record
+      summary: get hitter record
+      description: get hitter record
       parameters: 
         - name: year
           in: query
           type: string
           maxLength: 256
       responses:
-        200: 
-          description: personal year records
+        200:
+          description: hitter year records
           headers: 
             Data:
               type: string
               description: 応答時間
           schema:
-            $ref: ''
-        400: 
-        404: 
-        500: 
+            $ref: '#/definitions/hitterRecords'
+        400:
+        404:
+        500:
+
   definitions:
     hitterRecords: 
-    
+      type: object
+      description: hitter records
+      required:
+        -
+      properties:
+        name:
+          type: string
+        year:
+          type: string
+        team:
+          type: string
+
     hitterTotalRecords:
       type: array
       description: hitter total records
+      items:
+        $ref: '#/definitions/hitterRecords'
+
+    yearHitterRecords:
+      type: array
+      description: year all hitter rexords
       items:
         $ref: '#/definitions/hitterRecords'
 
