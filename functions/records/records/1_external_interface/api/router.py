@@ -7,3 +7,9 @@ class Router():
         """
         """
         pass
+
+    @route(function_id='p01', path='/api/...', methon='get')
+    def brabra(self, ):
+        """
+        """
+        pass
