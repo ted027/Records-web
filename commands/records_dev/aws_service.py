@@ -108,27 +108,3 @@ class AwsService(object):
             return self.resource.meta.client
         except:
             return self.session.client(self.__service_name, endpoint_url=self.endpoint)
-
-    @property
-    def region(self):
-        return self.__region
-
-    @region.setter
-    def region(self, x):
-        self.__region = x
-
-    @property
-    def endpoint(self):
-        return self.__endpoint
-
-    @endpoint.setter
-    def endpoint(self, x):
-        self.__endpoint = x
-
-    @property
-    def profile(self):
-        return self.__profile
-
-    @profile.setter
-    def profile(self, x):
-        self.__profile = x

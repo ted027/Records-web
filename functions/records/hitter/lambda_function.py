@@ -6,7 +6,7 @@ import sys
 
 import requests
 import bs4
-import json
+from records.1_external_interface.api.router import Router
 
 from logging import getLogger, StreamHandler, DEBUG
 logger = getLogger(__name__)
@@ -17,6 +17,11 @@ logger.addHandler(handler)
 logger.propagate = False
 
 def lambda_handler(event, context):
-    logger.debug('router start')
-    # router
-    logger.debug('router end')
+    try:
+        logger.debug('router start')
+        result = Router.route(event, self_=router)
+        logger.debug('router end')
+    except BaseException:
+        logger.warning('Exception was raised on Router.')
+        raise
+    return result
