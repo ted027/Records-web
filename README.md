@@ -82,3 +82,36 @@ for year in body_tr:
 
 
 ```
+
+以下の拡張機能をインストールする
+
+EvilInspector # 全角スペースをわかりやすく出す
+Japanese Language Pack for Visual Studio code
+Prettier - Code formatter # typescript formatter
+Python # python ide for vscode
+Swagger Viewer
+TSLint # typescript linter
+YAML # yaml support
+vscode-icons # show icons to each file in vscode
+
+{
+    "python.pythonPath": "<python path installed by conda>",
+    "restructuredtext.confPath": "${workspaceFolder}/docs",
+    "prettier.tabWidth": 4,
+    "yaml.schemas": {
+        "http://ci-oip-cmn-git-an1c.dev.belem.local/snippets/45/raw": "*template.yml",
+        "http://json.schemastore.org/swagger-2.0": ["*swagger.yaml", "*swagger.yml"],
+    },
+    "python.formatting.provider": "yapf",
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.insertSpaces": true,
+        "editor.tabSize": 4,
+    },
+    "files.insertFinalNewline": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+}
