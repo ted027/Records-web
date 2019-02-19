@@ -27,3 +27,13 @@ class Router():
         """
         """
         pass
+
+    @route(
+        function_id='p01',
+        path='/api/records/v1/pitcher/{personal_id}',
+        methon='get')
+    def get_pitcher_records(self, event, query, personal_id):
+        """
+        """
+        name = query.get('name', None) if query is not None else None
+        year = query.get('year', None) if query is not None else None
