@@ -37,3 +37,23 @@ class Router():
         """
         name = query.get('name', None) if query is not None else None
         year = query.get('year', None) if query is not None else None
+
+    @route(
+        function_id='p02',
+        path='/api/records/v1/pitcherTotal/{personal_id}',
+        methon='get')
+    def get_pitcher_records(self, event, query, personal_id):
+        """
+        """
+        name = query.get('name', None) if query is not None else None
+        year = query.get('year', None) if query is not None else None
+
+    @route(
+        function_id='p03',
+        path='/api/records/v1/pitchers/{year}',
+        methon='get')
+    def get_pitcher_records(self, event, query, year):
+        """
+        """
+        name = query.get('name', None) if query is not None else None
+        year = query.get('year', None) if query is not None else None
