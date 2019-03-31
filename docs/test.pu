@@ -1,1 +1,58 @@
-Bob->Alice : hello
+@startuml
+!define AWSPUML https://raw.githubusercontent.com/milo-minderbinder/AWS-PlantUML/release/18-2-22/dist
+
+!includeurl AWSPUML/common.puml
+!includeurl AWSPUML/ApplicationServices/AmazonAPIGateway/AmazonAPIGateway.puml
+!includeurl AWSPUML/Storage/AmazonS3/bucket/bucket.puml
+!includeurl AWSPUML/General/client/client.puml
+!includeurl AWSPUML/General/user/user.puml
+!includeurl AWSPUML/General/users/users.puml
+!includeurl AWSPUML/General/AWScloud/AWScloud.puml
+!includeurl AWSPUML/Compute/AWSLambda/LambdaFunction/LambdaFunction.puml
+!includeurl AWSPUML/Database/AmazonDynamoDB/AmazonDynamoDB.puml
+!includeurl AWSPUML/Database/AmazonDynamoDB/table/table.puml
+!includeurl AWSPUML/ManagementTools/AmazonCloudWatch/eventtimebased/eventtimebased.puml
+
+AWSCLOUD(aws) {
+    LAMBDAFUNCTION(rest,Rest)
+    LAMBDAFUNCTION(gather,Gathering)
+
+    AMAZONAPIGATEWAY(api,RestApi)
+
+    BUCKET(web_bucket,Web)
+    BUCKET(log_bucket,Log)
+
+    AMAZONDYNAMODB(dynamodb){
+        TABLE(pitch_table,Pitcher)
+        TABLE(hit_table,Hitter)
+        TABLE(team_table,Team)
+    }
+
+    EVENTTIMEBASED(timely_event)
+}
+
+USERS(users,Users)
+[Browser] as browser
+USER(developper,Developper)
+CLIENT(client)
+
+
+users --> browser
+browser --> api
+
+developper --> client
+client --> web_bucket : on demand build
+
+api --> rest
+rest --> web_bucket : js file
+rest --> dynamodb : records data
+
+timely_event --> gather : daily update job
+gather --> dynamodb
+web_bucket --> log_bucket
+
+pitch_table -[hidden]r- hit_table
+hit_table -[hidden]r- team_table
+web_bucket -[hidden]r- log_bucket
+
+@enduml

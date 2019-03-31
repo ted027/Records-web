@@ -96,15 +96,15 @@ class AwsService(object):
 
     @cached_property(ttl=0)
     def session(self):
-        return boto3.Session(region_name=self.region, profile_name=self.profile)
+        return boto3.Session(region_name=self.__region, profile_name=self.__profile)
 
     @cached_property(ttl=0)
     def resource(self):
-        return self.session.resource(self.__service_name, endpoint_url=self.endpoint)
+        return self.session.resource(self.__service_name, endpoint_url=self.__endpoint)
 
     @cached_property(ttl=0)
     def client(self):
         try:
             return self.resource.meta.client
         except:
-            return self.session.client(self.__service_name, endpoint_url=self.endpoint)
+            return self.session.client(self.__service_name, endpoint_url=self.__endpoint)
