@@ -7,6 +7,7 @@ import json
 @click.command()
 @click.pass_context
 def records(ctx):
+    # -2018
     baseurl = 'http://baseballdata.jp/'
 
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
