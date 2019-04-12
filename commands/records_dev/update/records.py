@@ -10,6 +10,12 @@ def records(ctx):
     # -2018
     baseurl = 'http://baseballdata.jp/'
 
+    # to direct
+    year_array = [
+        '', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011',
+        '2010'
+    ]
+
     leaguelist = ['ctop', 'cptop', 'ptop', 'pptop']
     sabrlist = ['sabr/cNOI', 'sabr/cHIDARITU', 'sabr/pNOI', 'sabr/pHIDARITU']
 
@@ -32,7 +38,7 @@ def records(ctx):
         # cut duplicated metrics
         del contents[22:24]
         return contents
-    
+
     def _cut_hitters_sabr_metrics(contents):
         # cut duplicated items
         del contents[:5]
@@ -97,7 +103,7 @@ def records(ctx):
         ]
         if 'HIDARITU' in sabr:
             sheader = _cut_pitcher_sabr_metrics(sheader)
-        else :
+        else:
             sheader = _cut_hitters_sabr_metrics(sheader)
         records_index[0].extend(sheader)
         sbody = strs[1:]
