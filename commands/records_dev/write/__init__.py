@@ -9,5 +9,5 @@ def write(ctx):
 write.add_command(yrecords.yrecords)
 write.add_command(yprofile.yprofile)
 write.add_command(yyearly.yyearly)
-write.add_command(spersonal.spersonal)
+# write.add_command(spersonal.spersonal)
 write.add_command(yteam.yteam)
