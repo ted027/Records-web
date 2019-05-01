@@ -67,13 +67,17 @@ def yrecords(ctx):
 
     for i in range(1,13):
 
-        purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=a'
+        purl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=p'
         hurl = baseurl + 'npb/teams/' + str(i) + '/memberlist?type=b'
 
         pit_link_tail_list = link_tail_list(purl)
         hit_link_tail_list = link_tail_list(hurl)
 
         for ptail in pit_link_tail_list:
+            # personal id
+            # [-1] is null
+            personal_id = ptail.split('/')[-2]
+
             personal_link = baseurl + ptail
             personal_soup = request_soup(personal_link)
 
